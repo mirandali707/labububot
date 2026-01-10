@@ -20,6 +20,8 @@
  */
 
 #include <LSM6DSV16XSensor.h>
+#include <SPI.h>
+
 
 #define ALGO_FREQ  120U /* Algorithm frequency 120Hz */
 #define ALGO_PERIOD  (1000U / ALGO_FREQ) /* Algorithm period [ms] */
@@ -31,10 +33,9 @@ unsigned long startTime, elapsedTime;
 #define SPI_SCK 7
 #define CS_PIN 44
 
-SPIClass dev_spi(SPI_MOSI, SPI_MISO, SPI_SCK);  
+// SPIClass dev_spi(SPI_MOSI, SPI_MISO, SPI_SCK);  
 
-// LSM6DSV16XSensor AccGyr(&Wire);
-LSM6DSV16XSensor AccGyr(&dev_spi, CS_PIN);
+LSM6DSV16XSensor AccGyr(&SPI, CS_PIN);
 // end miranda did this
 
 uint8_t status = 0;
@@ -45,17 +46,15 @@ float quaternions[4] = {0};
 
 void setup()
 {
-
   Serial.begin(115200);
   while (!Serial) {
     yield();
   }
   
   // begin miranda did this
-  dev_spi.begin();
+  SPI.begin();
   // end miranda did this
 
-  Wire.begin();
   // Initialize LSM6DSV16X.
   AccGyr.begin();
   AccGyr.Enable_X();
