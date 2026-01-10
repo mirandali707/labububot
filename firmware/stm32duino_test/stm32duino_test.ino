@@ -43,6 +43,9 @@ uint32_t k = 0;
 
 uint8_t tag = 0;
 float quaternions[4] = {0};
+int32_t accelerometer[3];
+int32_t gyroscope[3];
+
 
 void setup()
 {
@@ -93,17 +96,42 @@ void loop()
     for (int i = 0; i < fifo_samples; i++) {
       AccGyr.FIFO_Get_Tag(&tag);
       if (tag == 0x13u) {
-        AccGyr.FIFO_Get_Rotation_Vector(&quaternions[0]);
+        // Print accel + gyro data
+        AccGyr.Get_X_Axes(accelerometer);  
+        AccGyr.Get_G_Axes(gyroscope);
+
+        // Serial.print("Accelerometer: ");
+        // Serial.print("X: ");
+        // Serial.print(accelerometer[0], 4);
+        // Serial.print(" ");
+        // Serial.print("Y: ");
+        // Serial.print(accelerometer[1], 4);
+        // Serial.print(" ");
+        // Serial.print("Z: ");
+        // Serial.print(accelerometer[2], 4);
+        // Serial.println(" ");
+        // Serial.print("Gyroscope: ");
+        // Serial.print("X: ");
+        // Serial.print(gyroscope[0], 4);
+        // Serial.print(" ");
+        // Serial.print("Y: ");
+        // Serial.print(gyroscope[1], 4);
+        // Serial.print(" ");
+        // Serial.print("Z: ");
+        // Serial.print(gyroscope[2], 4);
+        // Serial.println(" ");
 
         // Print Quaternion data
-        Serial.print("Quaternion: ");
-        Serial.print(quaternions[3], 4);
-        Serial.print(", ");
-        Serial.print(quaternions[0], 4);
-        Serial.print(", ");
-        Serial.print(quaternions[1], 4);
-        Serial.print(", ");
-        Serial.println(quaternions[2], 4);
+        AccGyr.FIFO_Get_Rotation_Vector(&quaternions[0]);
+
+        // Serial.print("Quaternion: ");
+        // Serial.print(quaternions[3], 4);
+        // Serial.print(", ");
+        // Serial.print(quaternions[0], 4);
+        // Serial.print(", ");
+        // Serial.print(quaternions[1], 4);
+        // Serial.print(", ");
+        // Serial.println(quaternions[2], 4);
 
         // Compute the elapsed time within loop cycle and wait
         elapsedTime = millis() - startTime;
