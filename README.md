@@ -1,5 +1,9 @@
 # mf labubu
 
+ancestor:
+- [neilbot](https://fab.cba.mit.edu/classes/MAS.863/CBA/neilbot/index.html)
+- [miranda's neilbot docs](https://fab.cba.mit.edu/classes/863.25/people/MirandaLi/pages/week11.html)
+
 ![bububot](images/bubu_cell_proto.jpg)
 ![bububot](images/bubu_half_proto.jpg)
 
