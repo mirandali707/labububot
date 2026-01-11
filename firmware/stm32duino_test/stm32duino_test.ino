@@ -45,7 +45,7 @@ uint8_t tag = 0;
 float quaternions[4] = {0};
 int32_t accelerometer[3];
 int32_t gyroscope[3];
-
+float gravity[3] = {0};
 
 void setup()
 {
@@ -70,6 +70,7 @@ void setup()
   status |= AccGyr.Set_G_ODR(120.0f);
   status |= AccGyr.Set_SFLP_ODR(120.0f);
   status |= AccGyr.Enable_Rotation_Vector();
+  status |= AccGyr.Enable_Gravity_Vector();
   status |= AccGyr.FIFO_Set_Mode(LSM6DSV16X_STREAM_MODE);
 
   if (status != LSM6DSV16X_OK) {
@@ -132,6 +133,14 @@ void loop()
         // Serial.print(quaternions[1], 4);
         // Serial.print(", ");
         // Serial.println(quaternions[2], 4);
+
+        // Print gravity vector
+        AccGyr.FIFO_Get_Gravity_Vector(&gravity[0]);
+        Serial.print(gravity[0], 4);
+        Serial.print(", ");
+        Serial.print(gravity[1], 4);
+        Serial.print(", ");
+        Serial.println(gravity[2], 4);
 
         // Compute the elapsed time within loop cycle and wait
         elapsedTime = millis() - startTime;
