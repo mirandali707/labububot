@@ -1,3 +1,16 @@
+# software
+## server quickstart
+### Option 1: Using npx (Node.js)
+```bash
+npx http-server -p 8080
+```
+
+### Option 2: Using Python
+```bash
+python3 -m http.server 8080
+```
+
+
 # electronics
 * battery
 * ESP32S3
