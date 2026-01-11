@@ -1,0 +1,91 @@
+<!--
+  Rui Santos
+  Complete project details at https://RandomNerdTutorials.com/esp32-web-bluetooth/
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files.
+  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ESP32 Web BLE App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="">
+    <script src="ble_test.js"></script>
+</head>
+<body>
+  <h1>ESP32 Web BLE Application</h1>
+  <button id="connectBleButton">Connect to BLE Device</button>
+  <button id="disconnectBleButton">Disconnect BLE Device</button>
+  <p>BLE state: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
+  <h2>Fetched Value</h2>
+  <p><span id="valueContainer">NaN</span></p>
+  <p>Last reading: <span id="timestamp"></span></p>
+  <h2>Control GPIO 2</h2>
+  <button id="onButton">ON</button>
+  <button id="offButton">OFF</button>
+  <p>Last value sent: <span id="valueSent"></span></p>
+  <p><a href="https://randomnerdtutorials.com/">Created by RandomNerdTutorials.com</a></p>
+  <p><a href="https://RandomNerdTutorials.com/esp32-web-bluetooth/">Read the full project here.</a></p>
+
+  <script>
+    // DOM Elements
+    const connectButton = document.getElementById('connectBleButton');
+    const disconnectButton = document.getElementById('disconnectBleButton');
+    const onButton = document.getElementById('onButton');
+    const offButton = document.getElementById('offButton');
+    const retrievedValue = document.getElementById('valueContainer');
+    const latestValueSent = document.getElementById('valueSent');
+    const bleStateContainer = document.getElementById('bleState');
+    const timestampContainer = document.getElementById('timestamp');
+
+    // Connect Button
+    connectButton.addEventListener('click', async (event) => {
+      try {
+        await BLE.connect(handleDataReceived);
+        console.log('Connected successfully');
+      } catch (error) {
+        console.error('Failed to connect:', error);
+        alert('Failed to connect to BLE device: ' + error.message);
+      }
+    });
+
+    // Disconnect Button
+    disconnectButton.addEventListener('click', () => {
+      BLE.disconnect();
+    });
+
+    // Handle BLE connection state changes
+    window.addEventListener('ble-connection-changed', (event) => {
+      if (event.detail.connected) {
+        bleStateContainer.innerHTML = 'Connected';
+        bleStateContainer.style.color = '#24af37';
+      } else {
+        bleStateContainer.innerHTML = 'Disconnected';
+        bleStateContainer.style.color = '#d13a30';
+      }
+    });
+
+    // Callback for received data
+    function handleDataReceived(text) {
+      console.log('Data received:', text);
+      retrievedValue.innerHTML = text;
+      timestampContainer.innerHTML = getDateTime();
+    }
+
+    function getDateTime() {
+      var currentdate = new Date();
+      var day = ("00" + currentdate.getDate()).slice(-2);
+      var month = ("00" + (currentdate.getMonth() + 1)).slice(-2);
+      var year = currentdate.getFullYear();
+      var hours = ("00" + currentdate.getHours()).slice(-2);
+      var minutes = ("00" + currentdate.getMinutes()).slice(-2);
+      var seconds = ("00" + currentdate.getSeconds()).slice(-2);
+
+      var datetime = day + "/" + month + "/" + year + " at " + hours + ":" + minutes + ":" + seconds;
+      return datetime;
+    }
+  </script>
+
+</html>
