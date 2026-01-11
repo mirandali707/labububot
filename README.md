@@ -3,9 +3,15 @@
 ![bububot](images/bubu_cell_proto.jpg)
 ![bububot](images/bubu_half_proto.jpg)
 
+threejs digital twin labububot controller
+![dodecahedron](images/dodecahedron.jpeg)
+
+BLE soon :)
+
 # software
 
 ## server quickstart
+make sure ur in `labububot/server`
 ### Option 1: Using npx (Node.js)
 ```bash
 npx http-server -p 8080
