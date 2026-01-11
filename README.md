@@ -1,4 +1,10 @@
+# mf labubu
+
+![bububot](images/bubu_cell_proto.jpg)
+![bububot](images/bubu_half_proto.jpg)
+
 # software
+
 ## server quickstart
 ### Option 1: Using npx (Node.js)
 ```bash
