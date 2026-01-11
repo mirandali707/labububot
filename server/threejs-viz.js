@@ -30,7 +30,8 @@
 
     const radius = 1.0;
     const geom = new THREE.DodecahedronGeometry(radius);
-    const mat = new THREE.MeshStandardMaterial({ color: 0x0077cc, metalness: 0.2, roughness: 0.4 });
+    geom.computeVertexNormals(); 
+    const mat = new THREE.MeshStandardMaterial({ color: 0xfa87ce, flatShading: true });
     const mesh = new THREE.Mesh(geom, mat);
     scene.add(mesh);
 
@@ -40,6 +41,8 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
     window.addEventListener('resize', onResize);
+
+    addDodecahedronFaceNormals(mesh, scene);
 
     function animate() {
       requestAnimationFrame(animate);
@@ -57,4 +60,3 @@
     init();
   }
 })();
-
