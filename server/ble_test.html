@@ -4,6 +4,7 @@
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files.
   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+  1/11/25 modified heavily by Miranda
 -->
 
 <!DOCTYPE html>
@@ -21,24 +22,15 @@
   <p>BLE state: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
   <h2>Fetched Value</h2>
   <p><span id="valueContainer">NaN</span></p>
-  <p>Last reading: <span id="timestamp"></span></p>
-  <h2>Control GPIO 2</h2>
-  <button id="onButton">ON</button>
-  <button id="offButton">OFF</button>
-  <p>Last value sent: <span id="valueSent"></span></p>
-  <p><a href="https://randomnerdtutorials.com/">Created by RandomNerdTutorials.com</a></p>
-  <p><a href="https://RandomNerdTutorials.com/esp32-web-bluetooth/">Read the full project here.</a></p>
+  <!-- <p>Last value sent: <span id="valueSent"></span></p> -->
 
   <script>
     // DOM Elements
     const connectButton = document.getElementById('connectBleButton');
     const disconnectButton = document.getElementById('disconnectBleButton');
-    const onButton = document.getElementById('onButton');
-    const offButton = document.getElementById('offButton');
     const retrievedValue = document.getElementById('valueContainer');
-    const latestValueSent = document.getElementById('valueSent');
+    // const latestValueSent = document.getElementById('valueSent');
     const bleStateContainer = document.getElementById('bleState');
-    const timestampContainer = document.getElementById('timestamp');
 
     // Connect Button
     connectButton.addEventListener('click', async (event) => {
@@ -71,20 +63,6 @@
     function handleDataReceived(text) {
       console.log('Data received:', text);
       retrievedValue.innerHTML = text;
-      timestampContainer.innerHTML = getDateTime();
-    }
-
-    function getDateTime() {
-      var currentdate = new Date();
-      var day = ("00" + currentdate.getDate()).slice(-2);
-      var month = ("00" + (currentdate.getMonth() + 1)).slice(-2);
-      var year = currentdate.getFullYear();
-      var hours = ("00" + currentdate.getHours()).slice(-2);
-      var minutes = ("00" + currentdate.getMinutes()).slice(-2);
-      var seconds = ("00" + currentdate.getSeconds()).slice(-2);
-
-      var datetime = day + "/" + month + "/" + year + " at " + hours + ":" + minutes + ":" + seconds;
-      return datetime;
     }
   </script>
 

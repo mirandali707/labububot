@@ -115,88 +115,16 @@ function isConnected() {
 // ============================================================================
 
 /**
- * Encode command into 5-byte format
- * @param {string} cmd - Command name ("extend_servo", "retract_servo", or "reset")
- * @param {string} args - Command arguments (for extend_servo/retract_servo: comma-separated face IDs 1-32)
- * @returns {Uint8Array} - 5-byte encoded command
+ * Send message to ESP32
+ * @param {string} msg - message to send to ESP32
  */
-function encodeCommand(cmd, args = '') {
-  const bytes = new Uint8Array(5);
-  let commandBits = 0;
-  let dataBits = 0;
-
-  // Encode command (4 bits)
-  if (cmd === 'extend_servo') {
-    commandBits = 0b0010; 
-  } else if (cmd === 'retract_servo') {
-    commandBits = 0b0001; 
-  } else if (cmd === 'play_audio') {
-      commandBits = 0b0100; 
-  } else if (cmd === 'reset') {
-    commandBits = 0b1000;
-  } else {
-    throw new Error(`Unknown command: ${cmd}`);
-  }
-
-  // Encode data (32 bits) - for extend_servo and retract_servo
-  if ((cmd === 'extend_servo' || cmd === 'retract_servo') && args) {
-    // Parse comma-separated face IDs (1-32) and set corresponding bits (0-31)
-    const faceIds = args
-      .split(',')
-      .map((id) => parseInt(id.trim()))
-      .filter((id) => id >= 1 && id <= 32);
-    for (const faceId of faceIds) {
-      const bitIndex = faceId - 1;
-      if (bitIndex >= 0 && bitIndex < 32) {
-        dataBits |= 1 << bitIndex;
-      }
-    }
-  }
-
-  // Encode string args of an integer into the lower 20 bits for play_audio
-  if (cmd == "play_audio" && args && /^\d+$/.test(args)) {
-    const intVal = parseInt(args, 10);
-    if (intVal >= 0 && intVal <= 0xFFFFF) {
-      dataBits = intVal & 0xFFFFF;
-    } else {
-      throw new Error("Argument out of 20-bit unsigned int range (0-1048575)");
-    }
-  }
-
-  // Pack into 5 bytes:
-  // Byte 0: [command 0-3][data 0-3] - 4 bits command, 4 bits data (bits 0-3)
-  // Byte 1: [data 4-11] - 8 bits data (bits 4-11)
-  // Byte 2: [data 12-19] - 8 bits data (bits 12-19)
-  // Byte 3: [data 20-27] - 8 bits data (bits 20-27)
-  // Byte 4: [data 28-31] - 4 bits data (bits 28-31), upper 4 bits unused
-  bytes[0] = (commandBits & 0x0f) | ((dataBits & 0x0f) << 4);
-  bytes[1] = (dataBits >> 4) & 0xff;
-  bytes[2] = (dataBits >> 12) & 0xff;
-  bytes[3] = (dataBits >> 20) & 0xff;
-  bytes[4] = (dataBits >> 28) & 0x0f;
-
-  return bytes;
-}
-
-
-/**
- * Send command to ESP32 in compressed 5-byte format
- * @param {string} cmd - Command name ("extend_servo", "retract_servo", or "reset")
- * @param {string} args - Command arguments (for extend_servo/retract_servo: comma-separated face IDs 1-32)
- */
-async function sendToESP32(cmd, args = '') {
+async function sendToESP32(msg) {
   if (!charTx) {
     throw new Error('Not connected. Please connect first.');
   }
 
-  const encoded = encodeCommand(cmd, args);
-  await charTx.writeValue(encoded);
-  console.log(
-    `Sent to ESP32: ${cmd}${args ? ` (${args})` : ''}`,
-    Array.from(encoded)
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join(' '),
-  );
+  await charTx.writeValue(msg);
+  console.log(`Sent to ESP32: ${msg}`);
 }
 
 /**

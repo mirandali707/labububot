@@ -18,15 +18,11 @@ bool deviceConnected = false;
 bool oldDeviceConnected = false;
 uint32_t value = 0;
 
-const int ledPin = 2; // Use the appropriate GPIO pin for your setup
-
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
 #define SERVICE_UUID "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
 #define TX_CHAR_UUID "6e400003-b5a3-f393-e0a9-e50e24dcca9e" // notifications from ESP32 (TX)
 #define RX_CHAR_UUID  "6e400002-b5a3-f393-e0a9-e50e24dcca9e" // write to ESP32 (RX)
-#define SENSOR_CHARACTERISTIC_UUID "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
-#define LED_CHARACTERISTIC_UUID "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
 
 class MyServerCallbacks: public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
@@ -43,21 +39,15 @@ class MyCharacteristicCallbacks : public BLECharacteristicCallbacks {
     String value = pLedCharacteristic->getValue();
     if (value.length() > 0) {
       Serial.print("Characteristic event, written: ");
-      Serial.println(static_cast<int>(value[0])); // Print the integer value
-
-      int receivedValue = static_cast<int>(value[0]);
-      if (receivedValue == 1) {
-        digitalWrite(ledPin, HIGH);
-      } else {
-        digitalWrite(ledPin, LOW);
-      }
+      Serial.println(String(value).c_str());
     }
   }
 };
 
 void setup() {
   Serial.begin(115200);
-  pinMode(ledPin, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+
 
   // Create the BLE Device
   BLEDevice::init("ESP32");
@@ -68,21 +58,6 @@ void setup() {
 
   // Create the BLE Service
   BLEService *pService = pServer->createService(SERVICE_UUID);
-
-  // Create a BLE Characteristic
-  pSensorCharacteristic = pService->createCharacteristic(
-                      SENSOR_CHARACTERISTIC_UUID,
-                      BLECharacteristic::PROPERTY_READ   |
-                      BLECharacteristic::PROPERTY_WRITE  |
-                      BLECharacteristic::PROPERTY_NOTIFY |
-                      BLECharacteristic::PROPERTY_INDICATE
-                    );
-
-  // Create the ON button Characteristic
-  pLedCharacteristic = pService->createCharacteristic(
-                      LED_CHARACTERISTIC_UUID,
-                      BLECharacteristic::PROPERTY_WRITE
-                    );
                     
   // Create TX characteristic (for sending data to browser via notifications)
   pTxCharacteristic = pService->createCharacteristic(
@@ -97,14 +72,6 @@ void setup() {
       BLECharacteristic::PROPERTY_WRITE
   );
   // pRxCharacteristic->setCallbacks(new MyRxCallbacks());
-
-  // Register the callback for the ON button characteristic
-  pLedCharacteristic->setCallbacks(new MyCharacteristicCallbacks());
-
-  // https://www.bluetooth.com/specifications/gatt/viewer?attributeXmlFile=org.bluetooth.descriptor.gatt.client_characteristic_configuration.xml
-  // Create a BLE Descriptor
-  pSensorCharacteristic->addDescriptor(new BLE2902());
-  pLedCharacteristic->addDescriptor(new BLE2902());
 
   // Start the service
   pService->start();
@@ -121,12 +88,18 @@ void setup() {
 void loop() {
   // notify changed value
   if (deviceConnected) {
-    pSensorCharacteristic->setValue(String(value).c_str());
-    pSensorCharacteristic->notify();
+    pTxCharacteristic->setValue(String(value).c_str());
+    pTxCharacteristic->notify();
+
+    digitalWrite(LED_BUILTIN, LOW);  // turn the LED on
+    delay(100);                      // wait 
+    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED off
+
     value++;
     Serial.print("New value notified: ");
     Serial.println(value);
-    delay(3000); // bluetooth stack will go into congestion, if too many packets are sent, in 6 hours test i was able to go as low as 3ms
+
+    delay(1000); // bluetooth stack will go into congestion, if too many packets are sent, in 6 hours test i was able to go as low as 3ms
   }
   // disconnecting
   if (!deviceConnected && oldDeviceConnected) {
