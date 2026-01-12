@@ -26,6 +26,11 @@ npx http-server -p 8080
 python3 -m http.server 8080
 ```
 
+## tests
+### ble test
+flash `ble_test_ino.ino` onto the ESP32.
+on controller webpage (after starting server ofc), connect to BLE device.
+this should send a value that iteratively increases from the ESP32 to the browser (which should show up under Fetched Value), and if you send a message to the ESP32 (under Send Message) it will print it to the Serial monitor.
 
 # electronics
 * battery
