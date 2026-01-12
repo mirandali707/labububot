@@ -2,11 +2,10 @@
 #define BLESETUP_H
 
 void bleSetup();
+void sendValue(uint32_t value);
+void handleDisconnect();
+void handleConnect();
 
-extern BLEServer* pServer;
-extern BLECharacteristic* pTxCharacteristic;
-extern BLECharacteristic* pRxCharacteristic;
 extern bool deviceConnected;
-extern bool oldDeviceConnected;
 
 #endif

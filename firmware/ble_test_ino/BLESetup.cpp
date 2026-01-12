@@ -13,7 +13,7 @@
 BLEServer* pServer = NULL;
 BLECharacteristic* pTxCharacteristic = NULL;
 BLECharacteristic* pRxCharacteristic = NULL;
-bool deviceConnected = false;
+bool deviceConnected = false; // this is global btw
 bool oldDeviceConnected = false;
 
 class MyServerCallbacks: public BLEServerCallbacks {
@@ -71,4 +71,28 @@ void bleSetup() {
   pAdvertising->setMinPreferred(0x0);  // set value to 0x00 to not advertise this parameter
   BLEDevice::startAdvertising();
   Serial.println("Waiting a client connection to notify...");
+}
+
+void sendValue(uint32_t value){
+  // send value to browser 
+  pTxCharacteristic->setValue(String(value).c_str());
+  pTxCharacteristic->notify();
+}
+
+void handleDisconnect(){
+  if (!deviceConnected && oldDeviceConnected) {
+    Serial.println("Device disconnected.");
+    delay(500); // give the bluetooth stack the chance to get things ready
+    pServer->startAdvertising(); // restart advertising
+    Serial.println("Start advertising");
+    oldDeviceConnected = deviceConnected;
+  }
+}
+
+void handleConnect(){
+  if (deviceConnected && !oldDeviceConnected) {
+    // do stuff here on connecting
+    oldDeviceConnected = deviceConnected;
+    Serial.println("Device Connected");
+  }
 }
