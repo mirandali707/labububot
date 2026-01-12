@@ -7,7 +7,8 @@
     <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
     <script src="threejs-viz.js"></script>
     <script src="utils.js"></script>
-    <script src="ble_test.js"></script>
+    <script src="ble.js"></script>
+    <script src="ble_ui.js"></script>`
   </head>
   <body>
     <h1>labububot!</h1>
@@ -17,7 +18,15 @@
     </div>
     <div>
       <h2>networking test</h2>
-      
+      <button id="connectBleButton">Connect to BLE Device</button>
+      <button id="disconnectBleButton">Disconnect BLE Device</button>
+      <p>BLE state: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
+      <h2>Fetched Value</h2>
+      <p><span id="valueContainer">NaN</span></p>
+
+      <h2>Send Message</h2>
+      <input type="text" id="messageInput" placeholder="Enter message">
+      <button id="sendButton">Send</button>
     </div>
   </body>
 </html>
