@@ -4,7 +4,9 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/Users/miranda/Library/Arduino15/packages/**"
+                "/Users/miranda/Library/Arduino15/packages/**",
+                "/Users/miranda/Library/Arduino15/libraries/**",
+                "/Users/miranda/Documents/Arduino/libraries/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
