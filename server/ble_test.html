@@ -22,15 +22,19 @@
   <p>BLE state: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
   <h2>Fetched Value</h2>
   <p><span id="valueContainer">NaN</span></p>
-  <!-- <p>Last value sent: <span id="valueSent"></span></p> -->
+
+  <h2>Send Message</h2>
+  <input type="text" id="messageInput" placeholder="Enter message">
+  <button id="sendButton">Send</button>
 
   <script>
     // DOM Elements
     const connectButton = document.getElementById('connectBleButton');
     const disconnectButton = document.getElementById('disconnectBleButton');
     const retrievedValue = document.getElementById('valueContainer');
-    // const latestValueSent = document.getElementById('valueSent');
     const bleStateContainer = document.getElementById('bleState');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
 
     // Connect Button
     connectButton.addEventListener('click', async (event) => {
@@ -46,6 +50,20 @@
     // Disconnect Button
     disconnectButton.addEventListener('click', () => {
       BLE.disconnect();
+    });
+
+    // Send Message Button
+    sendButton.addEventListener('click', async () => {
+      const message = messageInput.value;
+      if (message.trim()) {
+        try {
+          await BLE.send(message);
+          messageInput.value = '';
+        } catch (error) {
+          console.error('Failed to send message:', error);
+          alert('Failed to send message: ' + error.message);
+        }
+      }
     });
 
     // Handle BLE connection state changes

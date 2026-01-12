@@ -123,7 +123,10 @@ async function sendToESP32(msg) {
     throw new Error('Not connected. Please connect first.');
   }
 
-  await charTx.writeValue(msg);
+  // Ensure the message is sent as an ArrayBuffer/TypedArray
+  const encoder = new TextEncoder();
+  const data = encoder.encode(String(msg));
+  await charTx.writeValue(data);
   console.log(`Sent to ESP32: ${msg}`);
 }
 

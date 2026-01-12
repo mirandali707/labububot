@@ -9,6 +9,12 @@
 #include <BLEUtils.h>
 #include <BLE2902.h>
 
+// See the following for generating UUIDs:
+// https://www.uuidgenerator.net/
+#define SERVICE_UUID "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+#define TX_CHAR_UUID "6e400003-b5a3-f393-e0a9-e50e24dcca9e" // notifications from ESP32 (TX)
+#define RX_CHAR_UUID  "6e400002-b5a3-f393-e0a9-e50e24dcca9e" // write to ESP32 (RX)
+
 BLEServer* pServer = NULL;
 BLECharacteristic* pSensorCharacteristic = NULL;
 BLECharacteristic* pLedCharacteristic = NULL;
@@ -17,12 +23,6 @@ BLECharacteristic* pRxCharacteristic = NULL;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
 uint32_t value = 0;
-
-// See the following for generating UUIDs:
-// https://www.uuidgenerator.net/
-#define SERVICE_UUID "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
-#define TX_CHAR_UUID "6e400003-b5a3-f393-e0a9-e50e24dcca9e" // notifications from ESP32 (TX)
-#define RX_CHAR_UUID  "6e400002-b5a3-f393-e0a9-e50e24dcca9e" // write to ESP32 (RX)
 
 class MyServerCallbacks: public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
@@ -34,14 +34,14 @@ class MyServerCallbacks: public BLEServerCallbacks {
   }
 };
 
-class MyCharacteristicCallbacks : public BLECharacteristicCallbacks {
-  void onWrite(BLECharacteristic* pLedCharacteristic) {
-    String value = pLedCharacteristic->getValue();
-    if (value.length() > 0) {
-      Serial.print("Characteristic event, written: ");
-      Serial.println(String(value).c_str());
+class MyRxCallbacks: public BLECharacteristicCallbacks {
+    void onWrite(BLECharacteristic* pCharacteristic) {
+        String rxValue = pCharacteristic->getValue();
+        if (rxValue.length() > 0) {
+          Serial.print("Received:");
+          Serial.println(String(rxValue).c_str());
+        }
     }
-  }
 };
 
 void setup() {
@@ -71,7 +71,7 @@ void setup() {
       RX_CHAR_UUID,
       BLECharacteristic::PROPERTY_WRITE
   );
-  // pRxCharacteristic->setCallbacks(new MyRxCallbacks());
+  pRxCharacteristic->setCallbacks(new MyRxCallbacks());
 
   // Start the service
   pService->start();
