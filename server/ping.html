@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ping test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="">
+    <script src="ble_setup.js"></script>
+    <script src="ping.js"></script>
+</head>
+<body>
+  <h1>ping test</h1>
+  <button id="connectBleButton">Connect to BLE Device</button>
+  <button id="disconnectBleButton">Disconnect BLE Device</button>
+  <p>BLE state: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
+
+  <input type="number" id="nInput" placeholder="Number of times to ping" value=10>
+  <button id="sendButton">send pings! ping ping</button>
+  <p>ping state: 
+    <span id="pingState">unpinged</span>
+  </p>
+
+  <h2>ping time</h2>
+  <!-- <p><span id="avgPingTime">NaN</span></p> -->
+  <p><span id="pingTimes">none so far...</span></p>
+</html>

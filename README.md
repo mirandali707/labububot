@@ -63,3 +63,8 @@ this is exactly the `servo.h` example from [Seeed docs for this PWM driver](http
 
 # references
 * [ben and dimitar's neilbot board](https://gitlab.cba.mit.edu/classes/863.25/CBA/cba-machine/-/tree/main/hardware/main)
+
+# things we need to buy or find
+* buck converters
+* 2 spoots PETG
+* mf glue 
