@@ -22,6 +22,5 @@ void loop() {
 // when we receive a value, send it immediately back
 void pingMsg(const String& receivedMsg)
 {
-    uint32_t timestamp = receivedMsg.toInt();
-    sendValue(timestamp);
+    sendValue(receivedMsg);
 }

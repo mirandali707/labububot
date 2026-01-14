@@ -1,6 +1,4 @@
 let pingArr = [];
-// let avgPingTime = 0;
-// let numPingsReceived = 0;
 
 // DOM Elements
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -12,7 +10,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const nInput= document.getElementById('nInput');
     const sendButton = document.getElementById('sendButton');
     const pingState = document.getElementById('pingState');
-    // const avgPingTime= document.getElementById('avgPingTime');
     const pingTimes = document.getElementById('pingTimes');
 
     // Connect Button
@@ -88,10 +85,5 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         pingArr.push(pingDuration);
         pingTimes.innerHTML = pingArr.toString();
-
-        // numPingsReceived++;
-        // if (numPingsReceived == 1){
-        // blaaaaa maybe moving average stuff
-        // }
     }
 });

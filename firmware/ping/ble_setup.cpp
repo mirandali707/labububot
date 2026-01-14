@@ -17,9 +17,7 @@ BLECharacteristic* pRxCharacteristic = NULL;
 bool deviceConnected = false; // this is global btw
 bool oldDeviceConnected = false;
 
-// // optional fn which runs when message is received from the browser
-// typedef std::function<void(const String&)> RxHandler;
-// RxHandler rxHandler = nullptr;
+// optional fn which runs when message is received from the browser
 static RxHandler rxHandler = nullptr;
 
 class MyServerCallbacks: public BLEServerCallbacks {
@@ -89,9 +87,9 @@ void bleSetup(
   Serial.println("Waiting a client connection to notify...");
 }
 
-void sendValue(uint32_t value){
+void sendValue(String value){
   // send value to browser 
-  pTxCharacteristic->setValue(String(value).c_str());
+  pTxCharacteristic->setValue(value);
   pTxCharacteristic->notify();
 }
 
