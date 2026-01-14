@@ -66,8 +66,49 @@ has browser UI: see `ping.html`
 	* connected via I2C
 * buck converter
 
-# hardware
-* 12 labubus
+# assembly
+- 1 servo
+- 1 servo arm
+- 1 decapitated + unstuffed labubu head
+- left and right clam pieces
+- arm piece
+- face plate
+- 6 m3 x 18 socket head cap screws (shcs)
+- 1 m3 x 10 shcs
+- 2 m4 x 35 shcs + washers
+- 2 big chonky heavy boys m8?
+
+for one bubu:
+1. truncate 2-directional servo arm to fit into arm piece
+![](img/step1.jpeg)
+2. screw m3 x 10 shcs in through arm and servo arm
+![](img/step2.jpeg)
+3. drill chubby chonky heavy boys into face plate
+![](img/step3.jpeg)
+4. hot glue time - **MAKE SURE ORIENTATION OF FACE PLATE IS CORRECT - screw holes on the side of the center protrusion should be away from the ears -- flat edge of center protrusion up, chamfered edge down; most important to vertically align face plate with labubu face.** 1 glue stick worth of glue injected from around the edges
+![](img/step4_back.jpeg)
+![](img/step4_front.jpeg)
+5. drill m4 x 35 into face plate holes to create threads, then undrill them
+![](img/step5.jpeg)
+6. position arm against face plate, use allen wrench to screw in m4 x 35s + washers through arm first, then face plate - approximate 3.5mm of overhang, align slot
+![](img/step6_overhang.jpeg)
+![](img/step6.jpeg)
+7. put arm on servo, screw m3x10 in to secure (we didn't do it in this order so no fotos)
+8. ==TODO: stuff and sew labubu==
+9. shove servo into servo slot, on clamshell which has a cutout for the wire. position wire side in slot and then shove the boy in
+![](img/step9_insertion.jpeg)
+![](img/step9_wirehole.jpeg)
+10. zip tie wire through zip tie slot so that wire is secure, but leave slack so wire doesn't pull on servo. cut zip tie
+![](img/step10.jpeg)
+
+**first all 12 first halves, then zero servos before assembling second halves**
+
+11. put both halves together. screw 4 m3 x 18 via allen wrench. in the other two holes, screw 2 m3 x 10 via allen wrench. tighten all together to secure two halves, until gap is closed - DON'T OVERTIGHTEN
+here are the holes for the m3x18:
+![](img/step11_m3_18.jpeg)
+here are the holes for the m3x10:
+![](img/step11_m3_10.jpeg)
+
 
 # references
 * [ben and dimitar's neilbot board](https://gitlab.cba.mit.edu/classes/863.25/CBA/cba-machine/-/tree/main/hardware/main)
