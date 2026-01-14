@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>ping test</title>
+    <link rel="stylesheet" href="styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="">
     <script src="ble_setup.js"></script>
@@ -9,17 +10,23 @@
 </head>
 <body>
   <h1>ping test</h1>
+  <p><strong>flash ping.ino onto the ESP32 for this test!</strong></p>
+  <p>
+    browser sends pings (timestamp, at time of send) to the ESP32, which sends it back immediately.
+    under ping time, we report the round trip durations in milliseconds.
+  </p>
   <button id="connectBleButton">Connect to BLE Device</button>
   <button id="disconnectBleButton">Disconnect BLE Device</button>
   <p>BLE state: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
 
+  <h2>send n pings</h2>
   <input type="number" id="nInput" placeholder="Number of times to ping" value=10>
   <button id="sendButton">send pings! ping ping</button>
   <p>ping state: 
     <span id="pingState">unpinged</span>
   </p>
 
-  <h2>ping time</h2>
+  <h2>ping time (ms)</h2>
   <!-- <p><span id="avgPingTime">NaN</span></p> -->
   <p><span id="pingTimes">none so far...</span></p>
 </html>

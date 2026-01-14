@@ -11,6 +11,7 @@
 <html>
 <head>
     <title>ESP32 Web BLE App</title>
+    <link rel="stylesheet" href="styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="">
     <script src="ble_setup.js"></script>
@@ -18,6 +19,12 @@
 </head>
 <body>
   <h1>ESP32 Web BLE Application</h1>
+  <p><strong>flash ble_test.ino onto the ESP32 for this test!</strong></p>
+  <p>
+    sends a count from the ESP32 to the browser (which should show up under Fetched Value).
+    if you send a message to the ESP32 (under Send Message) it will print it to the Serial monitor.
+    based on <a href="https://RandomNerdTutorials.com/esp32-web-bluetooth/">this blog post</a>
+  </p>
   <button id="connectBleButton">Connect to BLE Device</button>
   <button id="disconnectBleButton">Disconnect BLE Device</button>
   <p>BLE state: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>

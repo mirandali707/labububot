@@ -8,12 +8,16 @@
     if (!canvas) {
       canvas = document.createElement('canvas');
       canvas.id = canvasId;
+      // canvas.style.width = '1vw'; // i hate css. im convused. maybe a TODO for later to figure out how to actually resize the canvas...
+      // canvas.style.height = '1vh';
       document.body.appendChild(canvas);
     }
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio || 1);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    renderer.setSize(width, height);
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf7f7f7);
@@ -36,9 +40,11 @@
     scene.add(mesh);
 
     function onResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(width, height);
     }
     window.addEventListener('resize', onResize);
 

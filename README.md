@@ -40,8 +40,16 @@ sends a count from the ESP32 to the browser (which should show up under Fetched 
 if you send a message to the ESP32 (under Send Message) it will print it to the Serial monitor.
 based on [this blog post](https://RandomNerdTutorials.com/esp32-web-bluetooth/)
 
+has browser UI: see `ble_test.html`
+
 ### pca9685_test
 this is exactly the `servo.h` example from [Seeed docs for this PWM driver](https://wiki.seeedstudio.com/Grove-16-Channel_PWM_Driver-PCA9685/#software)
+
+### ping test
+browser sends pings (timestamp, at time of send) to the ESP32, which sends it back immediately.
+under ping time, we report the round trip durations.
+
+has browser UI: see `ping.html`
 
 # electronics
 * battery
