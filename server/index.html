@@ -14,25 +14,26 @@
   <body>
     <h1>labububot!</h1>
     <div>
-      <h2>dodecahedron</h2>
+      <button id="connectBleButton">Connect to BLE Device</button>
+      <button id="disconnectBleButton">Disconnect BLE Device</button>
+      <p>BLE state: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
+    </div>
+    <div>
+      <!-- labububot visualization  -->
       <canvas id="threeCanvas"></canvas>
+    </div>
+    <div>
+      <h2>received data</h2>
+      <p><span id="valueContainer">NaN</span></p>
+
+      <h2>send to ESP32</h2>
+      <input type="text" id="messageInput" placeholder="Enter message">
+      <button id="sendButton">send</button>
     </div>
     <div>
       <h2>tests</h2>
       <button onclick="document.location='/ping.html'">ping</button>
       <button onclick="document.location='/ble_test.html'">ble</button>
-    </div>
-    <div>
-      <h2>networking test</h2>
-      <button id="connectBleButton">Connect to BLE Device</button>
-      <button id="disconnectBleButton">Disconnect BLE Device</button>
-      <p>BLE state: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
-      <h2>Fetched Value</h2>
-      <p><span id="valueContainer">NaN</span></p>
-
-      <h2>Send Message</h2>
-      <input type="text" id="messageInput" placeholder="Enter message">
-      <button id="sendButton">Send</button>
     </div>
   </body>
 </html>
