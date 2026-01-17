@@ -9,16 +9,18 @@ void setup() {
     Wire.begin();
     Serial.begin(9600);
     servo.init(0x7f);
-    // uncomment this line if you need to use a special servo
-    // servo.setServoPulseRange(600,2400,180);
+    // Position "0" (1.5ms pulse) is middle, "90" (~2ms pulse) is middle, is all the way to the right, "-90" (~1ms pulse) is all the way to the left.
+    // datasheet: https://www.handsontec.com/dataspecs/motor_fan/MG996R.pdf
+    // params are in us
+    servo.setServoPulseRange(1000,2000,120);
 }
 
 void loop() {
-    // Drive 8 servos in turns
-    for (int i = 1; i < 9; i++) {
+    // Drive 12 servos in turns
+    for (int i = 0; i < 12; i++) {
         servo.setAngle(i, 0);
         delay(1000);
-        servo.setAngle(i, 90);
+        servo.setAngle(i, 60); // halfway
         delay(1000);
     }
 }
