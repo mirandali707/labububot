@@ -42,8 +42,10 @@ uint8_t status = 0;
 uint32_t k = 0;
 
 uint8_t tag = 0;
-int16_t accelerometer[3];
-int16_t gyroscope[3];
+// int16_t accelerometer[3];
+// int16_t gyroscope[3];
+int32_t accelerometer[3];
+int32_t gyroscope[3];
 // sensor fusion outputs 
 float quaternions[4] = {0};
 float gravity[3] = {0};
@@ -61,14 +63,21 @@ void setup()
 
   // Initialize LSM6DSV16X.
   AccGyr.begin();
-  AccGyr.Enable_X();
-  AccGyr.Enable_G();
+  status |= AccGyr.Device_Reset();
+
+  status |= AccGyr.Enable_X();
+  status |= AccGyr.Enable_G();
 
   // Enable Sensor Fusion
   status |= AccGyr.Set_X_FS(4);
   status |= AccGyr.Set_G_FS(500);
   status |= AccGyr.Set_X_ODR(60.0f);
   status |= AccGyr.Set_G_ODR(60.0f);
+
+  // Configure FIFO BDR for acc and gyro
+  status |= AccGyr.FIFO_Set_X_BDR(60.0f);
+  status |= AccGyr.FIFO_Set_G_BDR(60.0f);
+
   status |= AccGyr.Set_SFLP_ODR(60.0f);
   status |= AccGyr.Enable_Rotation_Vector();
   status |= AccGyr.Enable_Gravity_Vector();
@@ -98,10 +107,10 @@ void loop()
     for (int i = 0; i < fifo_samples; i++) {
       AccGyr.FIFO_Get_Tag(&tag);
       // Serial.println(tag);
-    //   if (tag == 0x13u) {
       if (tag == 0x2) {
         // Print accel data
-        AccGyr.Get_X_AxesRaw(accelerometer); // FIFO_Get_X_Axes?
+        AccGyr.FIFO_Get_X_Axes(accelerometer); // FIFO_Get_X_Axes?
+        // AccGyr.Get_X_AxesRaw(accelerometer); // FIFO_Get_X_Axes?
 
         Serial.print("Accelerometer: ");
         Serial.print("X: ");
@@ -116,7 +125,8 @@ void loop()
       }
       else if (tag == 0x1) {
         // Print gyr data
-        AccGyr.Get_G_AxesRaw(gyroscope);
+        AccGyr.FIFO_Get_G_Axes(gyroscope);
+        // AccGyr.Get_G_AxesRaw(gyroscope);
         Serial.print("Gyroscope: ");
         Serial.print("X: ");
         Serial.print(gyroscope[0], 4);
@@ -151,7 +161,6 @@ void loop()
         Serial.print(", ");
         Serial.println(quaternions[2], 4);
       }
-
 
       // Compute the elapsed time within loop cycle and wait
       elapsedTime = millis() - startTime;
