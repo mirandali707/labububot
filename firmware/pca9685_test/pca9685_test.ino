@@ -17,10 +17,16 @@ void setup() {
 
 void loop() {
     // Drive 12 servos in turns
-    for (int i = 0; i < 12; i++) {
-        servo.setAngle(i, 0);
-        delay(1000);
-        servo.setAngle(i, 60); // halfway
-        delay(1000);
+    for (int i = 1; i < 13; i++) {
+        servo.setAngle(i, 60);
     }
+    delay(4000);
+    for (int i = 1; i < 13; i++) {
+        servo.setAngle(i, 0);
+    }
+    delay(2000);
+    for (int i = 1; i < 13; i++) {
+        servo.setAngle(i, 120);
+    }
+    delay(2000);
 }
