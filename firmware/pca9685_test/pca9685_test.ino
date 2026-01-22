@@ -15,18 +15,29 @@ void setup() {
     servo.setServoPulseRange(1000,2000,120);
 }
 
+int SERVO_NUM = 11;
+
 void loop() {
-    // Drive 12 servos in turns
     for (int i = 1; i < 13; i++) {
-        servo.setAngle(i, 60);
+        if (i == SERVO_NUM){
+            servo.setAngle(i, 0); // 0 = all the way OUT
+        }
+        else {
+            servo.setAngle(i, 80);
+        }
     }
     delay(4000);
-    for (int i = 1; i < 13; i++) {
-        servo.setAngle(i, 0);
-    }
-    delay(2000);
-    for (int i = 1; i < 13; i++) {
-        servo.setAngle(i, 120);
-    }
-    delay(2000);
+    // Drive 12 servos in turns
+    // for (int i = 1; i < 13; i++) {
+    //     servo.setAngle(i, 60);
+    // }
+    // delay(4000);
+    // for (int i = 1; i < 13; i++) {
+    //     servo.setAngle(i, 0);
+    // }
+    // delay(2000);
+    // for (int i = 1; i < 13; i++) {
+    //     servo.setAngle(i, 120);
+    // }
+    // delay(2000);
 }
