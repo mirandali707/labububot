@@ -1,36 +1,30 @@
 #include <servo.h>
 
-ServoDriver servo;
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x7F);
+
+uint16_t pulseMin = 205;
+uint16_t pulseMax = 410;
+
+uint16_t angleToPulse(uint8_t angle) {
+    return map(angle, 0, 120, pulseMin, pulseMax);
+}
 
 void servo_driver_init(){
-    // join I2C bus (I2Cdev library doesn't do this automatically)
-    // Serial.println("DEBUG: Starting Wire.begin()");
-    // Wire.begin();
-    // Serial.println("DEBUG: Wire.begin() complete");
-    
-    // Scan for I2C devices
-    Serial.println("DEBUG: Scanning I2C bus...");
-    for (uint8_t addr = 0x08; addr < 0x78; addr++) {
-        Wire.beginTransmission(addr);
-        uint8_t error = Wire.endTransmission();
-        if (error == 0) {
-            Serial.print("DEBUG: Found I2C device at 0x");
-            Serial.println(addr, HEX);
-        }
-    }
-    Serial.println("DEBUG: I2C scan complete");
-    
-    Serial.println("DEBUG: Starting servo.init(0x7f)");
-    servo.init(0x7f);
-    Serial.println("DEBUG: servo.init() complete");
-    // datasheet: https://www.handsontec.com/dataspecs/motor_fan/MG996R.pdf
-    // params are in us
-    Serial.println("DEBUG: Starting setServoPulseRange");
-    servo.setServoPulseRange(1000,2000,120);
-    Serial.println("DEBUG: setServoPulseRange complete");
+    Serial.println("Starting I2C...");
+    Wire.begin(SDA_PIN, SCL_PIN);
+    Wire.setClock(100000);
+
+    Wire.beginTransmission(0x7F);
+    uint8_t err = Wire.endTransmission();
+    Serial.print("PCA9685 presence at 0x7F: ");
+    Serial.println(err == 0 ? "YES" : "NO");
+
+    Serial.println("Starting PCA9685...");
+    pwm.begin();
+    pwm.setPWMFreq(50);
+    Serial.println("PCA9685 ready");
 }
 
 void set_servo_angle(uint8_t servo_num, uint16_t angle){
-    // 0 is all the way out, 120 is all the way in
-    servo.setAngle(servo_num, angle); // 0 = all the way OUT
+    pwm.setPWM(servo_num, 0, angleToPulse(angle));
 }
