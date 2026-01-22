@@ -5,10 +5,15 @@
 #include <ble.h>
 #include <servo.h>
 
-// when we receive a value, log to serial
-void print_msg(const String& receivedMsg)
-{
-    Serial.print(receivedMsg);
+// handle browser commands
+void handle_command(const String& received_msg){
+  if (received_msg == "move"){
+    set_servo_angle(0, 0);
+    delay(1000);
+    set_servo_angle(0, 120);
+    delay(1000);
+    set_servo_angle(0, 0);
+  }
 }
 
 void setup()
@@ -18,7 +23,7 @@ void setup()
     yield();
   }
 
-  ble_init(print_msg); // initialize BLE with function to handle messages received from browser
+  ble_init(handle_command); // initialize BLE with function to handle messages received from browser
 
   // init_imu(); // TODO rename to imu_init
 
@@ -32,17 +37,4 @@ void loop()
   handle_disconnect();
 
   // update_imu_data();
-
-  Serial.println("Move servo to 0 degrees");
-  set_servo_angle(0, 0);
-  delay(2000);
-
-  Serial.println("Move servo to 60 degrees");
-  set_servo_angle(0, 60);
-  delay(2000);
-
-  Serial.println("Move servo to 120 degrees");
-  set_servo_angle(0, 120);
-  delay(2000);
-
 }
