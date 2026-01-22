@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>servo tests</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="">
+    <script src="ble_setup.js"></script>
+    <script src="ble_ui.js"></script>
+    <script src="servo_test.js"></script>
+</head>
+<body>
+  <h1>set servo angle</h1>
+  <p>
+    enter a servo number and angle from 0-120 to send a command to the ESP32!
+  </p>
+  <button id="connectBleButton">Connect to BLE Device</button>
+  <button id="disconnectBleButton">Disconnect BLE Device</button>
+  <p>BLE state: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
+
+  <h2>servo index</h2>
+  <input type="number" id="servoIdx" placeholder="Servo index" value=0>
+  <input type="number" id="angle" placeholder="Angle" value=0>
+  <button id="sendSetServo">send cmd</button>
+
+</html>

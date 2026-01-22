@@ -24,19 +24,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
         BLE.disconnect();
     });
 
-    // Send Message Button
-    sendButton.addEventListener('click', async () => {
-        const message = messageInput.value;
-        if (message.trim()) {
-        try {
-            await BLE.send(message);
-            messageInput.value = '';
-        } catch (error) {
-            console.error('Failed to send message:', error);
-            alert('Failed to send message: ' + error.message);
-        }
-        }
-    });
     // Handle BLE connection state changes
     window.addEventListener('ble-connection-changed', (event) => {
         if (event.detail.connected) {

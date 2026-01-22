@@ -167,3 +167,5 @@ window.BLE = {
   isConnected: isConnected,
   sleep: sleep,
 };
+
+// export { sendToESP32 };
