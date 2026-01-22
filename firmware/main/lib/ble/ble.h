@@ -5,10 +5,10 @@
 
 // fn to handle messages received by the ESP32
 using RxHandler = std::function<void(const String&)>;
-void bleSetup(RxHandler);
-void sendValue(String value);
-void handleDisconnect();
-void handleConnect();
+void ble_init(RxHandler);
+void send_value(String value);
+void handle_disconnect();
+void handle_connect();
 
 extern bool deviceConnected;
 

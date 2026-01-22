@@ -44,7 +44,7 @@ class MyRxCallbacks: public BLECharacteristicCallbacks {
   }
 };
 
-void bleSetup(
+void ble_init(
   RxHandler optionalRxHandler = nullptr
 ) {
   Serial.println("Setting up BLE...");
@@ -87,13 +87,13 @@ void bleSetup(
   Serial.println("Waiting a client connection to notify...");
 }
 
-void sendValue(String value){
+void send_value(String value){
   // send value to browser 
   pTxCharacteristic->setValue(value.c_str());
   pTxCharacteristic->notify();
 }
 
-void handleDisconnect(){
+void handle_disconnect(){
   if (!deviceConnected && oldDeviceConnected) {
     Serial.println("Device disconnected.");
     delay(500); // give the bluetooth stack the chance to get things ready
@@ -103,7 +103,7 @@ void handleDisconnect(){
   }
 }
 
-void handleConnect(){
+void handle_connect(){
   if (deviceConnected && !oldDeviceConnected) {
     // do stuff here on connecting
     oldDeviceConnected = deviceConnected;

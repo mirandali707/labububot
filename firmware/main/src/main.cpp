@@ -6,7 +6,7 @@
 #include <servo.h>
 
 // when we receive a value, log to serial
-void printMsg(const String& receivedMsg)
+void print_msg(const String& receivedMsg)
 {
     Serial.print(receivedMsg);
 }
@@ -18,18 +18,20 @@ void setup()
     yield();
   }
 
-  // bleSetup(printMsg);
+  ble_init(print_msg); // initialize BLE with function to handle messages received from browser
 
-  // init_imu();
+  // init_imu(); // TODO rename to imu_init
 
-  servo_driver_init();
+  servo_driver_init(); // initialize PCA9685 PWM servo driver
 }
 
 void loop()
 {
-  // // ble tings
-  // handleDisconnect();
-  // handleConnect();
+  // ble tings
+  handle_connect();
+  handle_disconnect();
+
+  // update_imu_data();
 
   Serial.println("Move servo to 0 degrees");
   set_servo_angle(0, 0);
@@ -42,5 +44,5 @@ void loop()
   Serial.println("Move servo to 120 degrees");
   set_servo_angle(0, 120);
   delay(2000);
-  // update_imu_data();
+
 }
