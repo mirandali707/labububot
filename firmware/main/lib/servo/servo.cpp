@@ -2,10 +2,11 @@
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x7F);
 
-uint16_t pulseMin = 205;
-uint16_t pulseMax = 410;
+uint16_t pulseMin = 205;  // 1000 µs
+uint16_t pulseMax = 410;  // 2000 µs
 
-uint16_t angleToPulse(uint8_t angle) {
+uint16_t angleToPulse(uint16_t angle) {
+    if (angle > 120) angle = 120;  // Clamp max angle
     return map(angle, 0, 120, pulseMin, pulseMax);
 }
 

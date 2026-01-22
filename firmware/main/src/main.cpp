@@ -4,15 +4,17 @@
 #include <imu.h>
 #include <ble.h>
 #include <servo.h>
+#include <parse_cmd.h>
 
 // handle browser commands
 void handle_command(const String& received_msg){
-  if (received_msg == "move"){
-    set_servo_angle(0, 0);
-    delay(1000);
-    set_servo_angle(0, 120);
-    delay(1000);
-    set_servo_angle(0, 0);
+  // received message is a /-delimited string, e.g.
+  // set/0/60 means "set servo with idx 0 to angle 60 degrees"
+  auto parts = parse_cmd(received_msg);
+  if (parts[0] == "set") {
+      int servoId = parts[1].toInt();
+      int angle = parts[2].toInt();
+      set_servo_angle(servoId, angle);
   }
 }
 
