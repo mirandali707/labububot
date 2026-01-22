@@ -1,54 +1,47 @@
-#include <Arduino.h>
 #include <Wire.h>
-#include <LSM6DSV16XSensor.h>
-#include <SPI.h>
-#include <imu.h>
-#include <ble.h>
-// #include <servo.h>
+#include <Adafruit_PWMServoDriver.h>
 
-// when we receive a value, log to serial
-void printMsg(const String& receivedMsg)
-{
-    Serial.print(receivedMsg);
+#define SDA_PIN 5
+#define SCL_PIN 6
+
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x7F);
+
+uint16_t pulseMin = 205;
+uint16_t pulseMax = 410;
+
+uint16_t angleToPulse(uint8_t angle) {
+    return map(angle, 0, 120, pulseMin, pulseMax);
 }
 
-void setup()
-{
-  delay(1000);  // Give USB time to enumerate
-  Serial.begin(115200);
-  Wire.begin();
-  while (!Serial) {
-    yield();
-  }
+void setup() {
+    Serial.begin(115200);
+    delay(2000);
+    Serial.println("Starting I2C...");
 
-  // bleSetup(printMsg);
+    Wire.begin(SDA_PIN, SCL_PIN);
+    Wire.setClock(100000);
 
-  init_imu();
-  // Serial.println("hello world");
-  // Serial.println("before servo_driver_init");
-  // servo_driver_init();
-  // Serial.println("after servo_driver_init");
+    Wire.beginTransmission(0x7F);
+    uint8_t err = Wire.endTransmission();
+    Serial.print("PCA9685 presence at 0x7F: ");
+    Serial.println(err == 0 ? "YES" : "NO");
+
+    Serial.println("Starting PCA9685...");
+    pwm.begin();
+    pwm.setPWMFreq(50);
+    Serial.println("PCA9685 ready");
 }
 
-int SERVO_NUM = 1;
+void loop() {
+    Serial.println("Move servo to 0 degrees");
+    pwm.setPWM(0, 0, angleToPulse(0));
+    delay(2000);
 
-void loop()
-{
-  // // ble tings
-  // handleDisconnect();
-  // handleConnect();
+    Serial.println("Move servo to 60 degrees");
+    pwm.setPWM(0, 0, angleToPulse(60));
+    delay(2000);
 
-  update_imu_data();
-  // Serial.println("setting to 60");
-  // // servo.setAngle(SERVO_NUM, 60);
-  // set_servo_angle(SERVO_NUM, 60);
-  // delay(2000);
-  // Serial.println("setting to 0");
-  // // servo.setAngle(SERVO_NUM, 0);
-  // set_servo_angle(SERVO_NUM, 0);
-  // delay(2000);
-  // Serial.println("setting to 120");
-  // // servo.setAngle(SERVO_NUM, 120);
-  // set_servo_angle(SERVO_NUM, 120);
-  // delay(2000);
+    Serial.println("Move servo to 120 degrees");
+    pwm.setPWM(0, 0, angleToPulse(120));
+    delay(2000);
 }
