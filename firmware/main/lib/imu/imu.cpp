@@ -75,11 +75,15 @@ void update_imu_data(){
       // each elem in FIFO has a tag which describes what type of data it is, and then the data
       AccGyr.FIFO_Get_Tag(&tag);
       if (tag == 0x2) {
+        // NOTE: THESE VALUES ARE BROKEN!
+        // see stm32duino_accgyr.ino for working code
         // accelerometer
         AccGyr.FIFO_Get_X_Axes(accelerometer); 
         // AccGyr.Get_X_AxesRaw(accelerometer); 
       }
       else if (tag == 0x1) {
+        // NOTE: THESE VALUES ARE BROKEN! int overflow vibes...
+        // see stm32duino_accgyr.ino for working code
         // gyroscope
         AccGyr.FIFO_Get_G_Axes(gyroscope);
         // AccGyr.Get_G_AxesRaw(gyroscope);
