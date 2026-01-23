@@ -44,5 +44,5 @@ void loop()
 
   update_imu_data();
   print_imu_data();
-  // send_imu_data_to_browser();
+  send_imu_data_to_browser();
 }

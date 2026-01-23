@@ -75,15 +75,11 @@ void update_imu_data(){
       // each elem in FIFO has a tag which describes what type of data it is, and then the data
       AccGyr.FIFO_Get_Tag(&tag);
       if (tag == 0x2) {
-        // NOTE: THESE VALUES ARE BROKEN!
-        // see stm32duino_accgyr.ino for working code
         // accelerometer
         AccGyr.FIFO_Get_X_Axes(accelerometer); 
         // AccGyr.Get_X_AxesRaw(accelerometer); 
       }
       else if (tag == 0x1) {
-        // NOTE: THESE VALUES ARE BROKEN! int overflow vibes...
-        // see stm32duino_accgyr.ino for working code
         // gyroscope
         AccGyr.FIFO_Get_G_Axes(gyroscope);
         // AccGyr.Get_G_AxesRaw(gyroscope);
@@ -110,39 +106,39 @@ void update_imu_data(){
 void print_imu_data(){
   Serial.print("Accelerometer: ");
   Serial.print("X: ");
-  Serial.print(accelerometer[0], 4);
+  Serial.print(accelerometer[0]);
   Serial.print(" ");
   Serial.print("Y: ");
-  Serial.print(accelerometer[1], 4);
+  Serial.print(accelerometer[1]);
   Serial.print(" ");
   Serial.print("Z: ");
-  Serial.print(accelerometer[2], 4);
+  Serial.print(accelerometer[2]);
   Serial.println(" ");
 
   Serial.print("Gyroscope: ");
   Serial.print("X: ");
-  Serial.print(gyroscope[0], 4);
+  Serial.print(gyroscope[0]);
   Serial.print(" ");
   Serial.print("Y: ");
-  Serial.print(gyroscope[1], 4);
+  Serial.print(gyroscope[1]);
   Serial.print(" ");
   Serial.print("Z: ");
-  Serial.print(gyroscope[2], 4);
+  Serial.print(gyroscope[2]);
   Serial.println(" ");
 
   Serial.print("Quaternion: ");
-  Serial.print(quaternions[3], 4);
+  Serial.print(quaternions[3]);
   Serial.print(", ");
-  Serial.print(quaternions[0], 4);
+  Serial.print(quaternions[0]);
   Serial.print(", ");
-  Serial.print(quaternions[1], 4);
+  Serial.print(quaternions[1]);
   Serial.print(", ");
-  Serial.println(quaternions[2], 4);
+  Serial.println(quaternions[2]);
 
   Serial.print("Gravity Vector: ");
-  Serial.print(gravity[0], 4);
+  Serial.print(gravity[0]);
   Serial.print(", ");
-  Serial.print(gravity[1], 4);
+  Serial.print(gravity[1]);
   Serial.print(", ");
-  Serial.println(gravity[2], 4);
+  Serial.println(gravity[2]);
 }
