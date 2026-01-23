@@ -26,7 +26,7 @@ uint32_t k = 0;
 // ImuData imu_data;
 uint8_t tag = 0;
 
-void init_imu(){
+void imu_init(){
   SPI.begin();
 
   // Initialize LSM6DSV16X.
@@ -72,64 +72,28 @@ void update_imu_data(){
   // Read the FIFO if there is one stored sample
   if (fifo_samples > 0) {
     for (int i = 0; i < fifo_samples; i++) {
+      // each elem in FIFO has a tag which describes what type of data it is, and then the data
       AccGyr.FIFO_Get_Tag(&tag);
-      // Serial.println(tag);
       if (tag == 0x2) {
-        // Print accel data
-        AccGyr.FIFO_Get_X_Axes(accelerometer); // FIFO_Get_X_Axes?
-        // AccGyr.Get_X_AxesRaw(accelerometer); // FIFO_Get_X_Axes?
-
-        Serial.print("Accelerometer: ");
-        Serial.print("X: ");
-        Serial.print(accelerometer[0], 4);
-        Serial.print(" ");
-        Serial.print("Y: ");
-        Serial.print(accelerometer[1], 4);
-        Serial.print(" ");
-        Serial.print("Z: ");
-        Serial.print(accelerometer[2], 4);
-        Serial.println(" ");
+        // accelerometer
+        AccGyr.FIFO_Get_X_Axes(accelerometer); 
+        // AccGyr.Get_X_AxesRaw(accelerometer); 
       }
       else if (tag == 0x1) {
-        // Print gyr data
+        // gyroscope
         AccGyr.FIFO_Get_G_Axes(gyroscope);
         // AccGyr.Get_G_AxesRaw(gyroscope);
-        Serial.print("Gyroscope: ");
-        Serial.print("X: ");
-        Serial.print(gyroscope[0], 4);
-        Serial.print(" ");
-        Serial.print("Y: ");
-        Serial.print(gyroscope[1], 4);
-        Serial.print(" ");
-        Serial.print("Z: ");
-        Serial.print(gyroscope[2], 4);
-        Serial.println(" ");
       }
       else if (tag == 0x17){
-        // Print gravity vector
-        Serial.print("Gravity Vector: ");
-        AccGyr.FIFO_Get_Gravity_Vector(&gravity[0]);
-        Serial.print(gravity[0], 4);
-        Serial.print(", ");
-        Serial.print(gravity[1], 4);
-        Serial.print(", ");
-        Serial.println(gravity[2], 4);
+        // gravity vector
+        AccGyr.FIFO_Get_Gravity_Vector(gravity);
       }
       else if (tag == 0x13){
-        // Print Quaternion data
-        AccGyr.FIFO_Get_Rotation_Vector(&quaternions[0]);
-
-        Serial.print("Quaternion: ");
-        Serial.print(quaternions[3], 4);
-        Serial.print(", ");
-        Serial.print(quaternions[0], 4);
-        Serial.print(", ");
-        Serial.print(quaternions[1], 4);
-        Serial.print(", ");
-        Serial.println(quaternions[2], 4);
+        // quaternion 
+        AccGyr.FIFO_Get_Rotation_Vector(quaternions);
       }
 
-      // Compute the elapsed time within loop cycle and wait
+      // compute elapsed time within loop cycle and wait so we don't update too often
       elapsedTime = millis() - startTime;
 
       if ((long)(ALGO_PERIOD - elapsedTime) > 0) {
@@ -139,31 +103,42 @@ void update_imu_data(){
   }
 }
 
-// void print_imu_data(){
-//   Serial.println("acc: ");
-//   Serial.println(imu_data.acc[0], 4);
-//   Serial.println(imu_data.acc[1], 4);
-//   Serial.println(imu_data.acc[2], 4);
-//   Serial.println();
+void print_imu_data(){
+  Serial.print("Accelerometer: ");
+  Serial.print("X: ");
+  Serial.print(accelerometer[0], 4);
+  Serial.print(" ");
+  Serial.print("Y: ");
+  Serial.print(accelerometer[1], 4);
+  Serial.print(" ");
+  Serial.print("Z: ");
+  Serial.print(accelerometer[2], 4);
+  Serial.println(" ");
 
-//   Serial.println("gyr: ");
-//   Serial.println(imu_data.gyr[0], 4);
-//   Serial.println(imu_data.gyr[1], 4);
-//   Serial.println(imu_data.gyr[2], 4);
-//   Serial.println();
+  Serial.print("Gyroscope: ");
+  Serial.print("X: ");
+  Serial.print(gyroscope[0], 4);
+  Serial.print(" ");
+  Serial.print("Y: ");
+  Serial.print(gyroscope[1], 4);
+  Serial.print(" ");
+  Serial.print("Z: ");
+  Serial.print(gyroscope[2], 4);
+  Serial.println(" ");
 
-//   // Print Quaternion data
-//   Serial.println("quat: ");
-//   Serial.println(imu_data.quat[0], 4);
-//   Serial.println(imu_data.quat[1], 4);
-//   Serial.println(imu_data.quat[2], 4);
-//   Serial.println(imu_data.quat[3], 4);
-//   Serial.println();
+  Serial.print("Quaternion: ");
+  Serial.print(quaternions[3], 4);
+  Serial.print(", ");
+  Serial.print(quaternions[0], 4);
+  Serial.print(", ");
+  Serial.print(quaternions[1], 4);
+  Serial.print(", ");
+  Serial.println(quaternions[2], 4);
 
-//   // Print gravity vector
-//   Serial.println("grav: ");
-//   Serial.println(imu_data.grav[0], 4);
-//   Serial.println(imu_data.grav[1], 4);
-//   Serial.println(imu_data.grav[2], 4);
-//   Serial.println();
-// }
+  Serial.print("Gravity Vector: ");
+  Serial.print(gravity[0], 4);
+  Serial.print(", ");
+  Serial.print(gravity[1], 4);
+  Serial.print(", ");
+  Serial.println(gravity[2], 4);
+}

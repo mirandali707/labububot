@@ -4,7 +4,7 @@
 #include <imu.h>
 #include <ble.h>
 #include <servo.h>
-#include <parse_cmd.h>
+#include <networking_utils.h>
 
 // handle browser commands
 void handle_command(const String& received_msg){
@@ -18,6 +18,10 @@ void handle_command(const String& received_msg){
   }
 }
 
+void send_imu_data_to_browser(){
+  send_value(format_imu_data(accelerometer, gyroscope, quaternions, gravity));
+}
+
 void setup()
 {
   Serial.begin(115200);
@@ -27,7 +31,7 @@ void setup()
 
   ble_init(handle_command); // initialize BLE with function to handle messages received from browser
 
-  // init_imu(); // TODO rename to imu_init
+  imu_init(); // TODO rename to imu_init
 
   servo_driver_init(); // initialize PCA9685 PWM servo driver
 }
@@ -38,5 +42,7 @@ void loop()
   handle_connect();
   handle_disconnect();
 
-  // update_imu_data();
+  update_imu_data();
+  print_imu_data();
+  // send_imu_data_to_browser();
 }

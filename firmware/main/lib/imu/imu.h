@@ -17,6 +17,6 @@ extern int32_t gyroscope[3];
 extern float quaternions[4];
 extern float gravity[3];
 
-void init_imu();
+void imu_init();
 void update_imu_data();
-// void print_imu_data();
+void print_imu_data();
