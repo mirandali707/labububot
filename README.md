@@ -2,14 +2,15 @@
 
 Labububot (they/them) is a 12-headed, spherical robot.
 
-https://github.com/user-attachments/assets/c3b5b5f4-7f28-4f24-a35f-e6e06569df5c
+https://github.com/user-attachments/assets/dadfb60f-6797-4210-bd5c-d21815fad00e
 
-https://github.com/user-attachments/assets/790c8d50-3174-4930-8c23-f068ced3f498
+https://github.com/user-attachments/assets/a78946b9-4492-444b-ae28-aa99f99fa427
 
-https://github.com/user-attachments/assets/d02e6ae4-7f6f-4bf3-8652-7b570cbcb863
+https://github.com/user-attachments/assets/b0edc415-2791-42cc-b36b-7b1b4265cd20
 
 ## progress (reverse chronological)
-https://github.com/user-attachments/assets/87c9277f-5bdb-4059-a792-1e3758ac1689
+
+https://github.com/user-attachments/assets/68c9fd3b-862c-404a-a182-f51555a04e33
 
 ![](images/labububomb.jpg)
 
