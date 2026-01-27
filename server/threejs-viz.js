@@ -77,7 +77,9 @@
     // Expose function to update gravity vector
     window.updateGravityVector = function(gx, gy, gz) {
       const gravityMagnitude = Math.sqrt(gx * gx + gy * gy + gz * gz);
-      const direction = new THREE.Vector3(gx, gy, gz).normalize();
+      let direction = new THREE.Vector3(gx, gy, gz).normalize();
+      // Apply the mesh's current quaternion to rotate the gravity vector
+      direction.applyQuaternion(mesh.quaternion);
       gravityArrow.setDirection(direction);
       gravityArrow.setLength(Math.min(gravityMagnitude / 100, 3)); // Scale for visualization
     };
