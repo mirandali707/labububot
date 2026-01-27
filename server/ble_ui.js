@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     // Callback for received data
     function handleDataReceived(text) {
-        console.log('Data received:', text);
+        // console.log('Data received:', text);
         retrievedValue.innerHTML = text;
         
         // Parse and apply quaternion rotation

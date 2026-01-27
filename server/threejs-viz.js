@@ -71,6 +71,21 @@
 
     // Expose function to update mesh rotation based on quaternion
     window.updateMeshRotation = function(quaternion) {
+      // Rotate -90 degrees around X (swap Y/Z)
+      const yzSwap = new THREE.Quaternion()
+        .setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
+      quaternion.premultiply(yzSwap);
+
+      // Rotate +90 degrees around Y (swap X/Z)
+      const xzSwap = new THREE.Quaternion()
+        .setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+      quaternion.premultiply(xzSwap);
+
+      // Flip upside-down (180° around X)
+      const flip = new THREE.Quaternion()
+        .setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI);
+      quaternion.premultiply(flip);
+
       mesh.quaternion.copy(quaternion);
     };
 
