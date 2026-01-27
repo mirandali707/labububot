@@ -39,6 +39,15 @@
     const mesh = new THREE.Mesh(geom, mat);
     scene.add(mesh);
 
+    // Create arrow helper for gravity vector
+    const gravityArrow = new THREE.ArrowHelper(
+      new THREE.Vector3(0, 0, 1),
+      new THREE.Vector3(0, 0, 0),
+      1,
+      0x0000ff
+    );
+    scene.add(gravityArrow);
+
     function onResize() {
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
@@ -53,6 +62,14 @@
     // Expose function to update mesh rotation based on quaternion
     window.updateMeshRotation = function(quaternion) {
       mesh.quaternion.copy(quaternion);
+    };
+
+    // Expose function to update gravity vector
+    window.updateGravityVector = function(gx, gy, gz) {
+      const gravityMagnitude = Math.sqrt(gx * gx + gy * gy + gz * gz);
+      const direction = new THREE.Vector3(gx, gy, gz).normalize();
+      gravityArrow.setDirection(direction);
+      gravityArrow.setLength(Math.min(gravityMagnitude / 100, 3)); // Scale for visualization
     };
 
     function animate() {

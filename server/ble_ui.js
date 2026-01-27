@@ -48,6 +48,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
         return null;
     }
 
+    // Parse gravity vector from IMU data string
+    function parseGravity(data) {
+        const gravMatch = data.match(/\/grav\/([\d.-]+)\/([\d.-]+)\/([\d.-]+)/);
+        if (gravMatch) {
+            const x = parseFloat(gravMatch[1]);
+            const y = parseFloat(gravMatch[2]);
+            const z = parseFloat(gravMatch[3]);
+            return { x, y, z };
+        }
+        return null;
+    }
+
     // Callback for received data
     function handleDataReceived(text) {
         console.log('Data received:', text);
@@ -58,6 +70,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
         if (quat && window.updateMeshRotation) {
             const quaternion = new THREE.Quaternion(quat.x, quat.y, quat.z, quat.w);
             window.updateMeshRotation(quaternion);
+        }
+
+        // Parse and apply gravity vector
+        const grav = parseGravity(text);
+        if (grav && window.updateGravityVector) {
+            window.updateGravityVector(grav.x, grav.y, grav.z);
         }
     }
 });
