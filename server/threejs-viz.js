@@ -21,6 +21,16 @@
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf7f7f7);
+    
+    // Make scene globally accessible for modules
+    window.scene = scene;
+
+    // Coordinate system helper (axes)
+    const axesHelper = new THREE.AxesHelper(2);
+    scene.add(axesHelper);
+
+    // Add axis labels
+    addAxisLabels();    
 
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(3, 2.5, 3);
@@ -86,3 +96,63 @@
     init();
   }
 })();
+
+// Function to add axis labels
+function addAxisLabels() {
+  const axisLength = 2;
+  const labelOffset = 0.3; // Distance from axis end
+
+  // +X axis (red)
+  const plusXLabel = createTextSprite('+X', 0xff0000);
+  plusXLabel.position.set(axisLength + labelOffset, 0, 0);
+  scene.add(plusXLabel);
+
+  // -X axis
+  const minusXLabel = createTextSprite('-X', 0xff0000);
+  minusXLabel.position.set(-axisLength - labelOffset, 0, 0);
+  scene.add(minusXLabel);
+
+  // +Y axis (green)
+  const plusYLabel = createTextSprite('+Y', 0x00ff00);
+  plusYLabel.position.set(0, axisLength + labelOffset, 0);
+  scene.add(plusYLabel);
+
+  // -Y axis
+  const minusYLabel = createTextSprite('-Y', 0x00ff00);
+  minusYLabel.position.set(0, -axisLength - labelOffset, 0);
+  scene.add(minusYLabel);
+
+  // +Z axis (blue)
+  const plusZLabel = createTextSprite('+Z', 0x0000ff);
+  plusZLabel.position.set(0, 0, axisLength + labelOffset);
+  scene.add(plusZLabel);
+
+  // -Z axis
+  const minusZLabel = createTextSprite('-Z', 0x0000ff);
+  minusZLabel.position.set(0, 0, -axisLength - labelOffset);
+  scene.add(minusZLabel);
+}
+
+// Function to create a text sprite
+function createTextSprite(text, color = 0x000000) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  canvas.width = 128;
+  canvas.height = 128;
+
+  context.fillStyle = 'rgba(255, 255, 255, 0)'; // Transparent background
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  context.font = 'Bold 64px Arial';
+  context.fillStyle = `#${color.toString(16).padStart(6, '0')}`;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillText(text, canvas.width / 2, canvas.height / 2);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+  const sprite = new THREE.Sprite(spriteMaterial);
+  sprite.scale.set(0.5, 0.5, 1);
+
+  return sprite;
+}
