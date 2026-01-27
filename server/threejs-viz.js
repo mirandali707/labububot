@@ -32,7 +32,7 @@
     // Add axis labels
     addAxisLabels();    
 
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
     camera.position.set(3, 2.5, 3);
     camera.lookAt(0, 0, 0);
 
