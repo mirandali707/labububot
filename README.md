@@ -1,27 +1,72 @@
 # mf labubu
 
-ancestor:
-- [neilbot](https://fab.cba.mit.edu/classes/MAS.863/CBA/neilbot/index.html)
-- [miranda's neilbot docs](https://fab.cba.mit.edu/classes/863.25/people/MirandaLi/pages/week11.html)
+Labububot (they/them) is a 12-headed, spherical robot.
+
+https://github.com/user-attachments/assets/c3b5b5f4-7f28-4f24-a35f-e6e06569df5c
+
+https://github.com/user-attachments/assets/790c8d50-3174-4930-8c23-f068ced3f498
+
+https://github.com/user-attachments/assets/d02e6ae4-7f6f-4bf3-8652-7b570cbcb863
+
+## progress (reverse chronological)
+https://github.com/user-attachments/assets/87c9277f-5bdb-4059-a792-1e3758ac1689
+
+![](images/labububomb.jpg)
+
+![](images/labubu_guillotine.jpg)
+
+![](images/labubu_twins.jpg)
+
+![](images/bubu_half_proto.jpg)
 
 ![bububot](images/bubu_cell_proto.jpg)
-![bububot](images/bubu_half_proto.jpg)
 
-threejs digital twin labububot controller
-![dodecahedron](images/dodecahedron.jpeg)
+## concept
+Labububot is a playful critique of social robots and their forms.
 
-BLE soon :)
+<!-- Roboticists claim that the dawn of ubiquitous robots is imminent. -->
+Human-robot interaction research frequently begins with the claim that we will soon be surrounded by robots in our everyday lives, and as delivery drones and cleaning robots are already somewhat commonplace in Shenzhen, the claim feels substantial.
+
+If this is true, our world of human cyborgs will soon confront a new, baffling species, neither man nor animal, too agentic to be considered a machine, too mechanical to be considered an organism. From the field of monster theory:
+
+> "Jeffrey Weinstock explains that monsters ‘are things that should not be, but nevertheless are--and their existence raises vexing questions about humanity’s understanding of and place in the universe"
+> 
+> (Monsters: interdisciplinary explorations in monstrosity, Erle & Hendry 2020)
+
+We claim that social robots can be analyzed as monsters: for example, a disembodied, illuminated face that hides a camera, which blinks its digital eyes at you, records your speech, and metabolizes it through a large language model before playing back a synthesized "speech" waveform arguably "should not be" according to the laws of God or nature, but nevertheless is.
+
+![](furhat.jpg)
+
+... not to name names.
+
+Labubu is also, famously, a [monster](https://www.popmart.com/us/collection/11/the-monsters). 
+Labubu is also a classic example of [baby schema](https://pmc.ncbi.nlm.nih.gov/articles/PMC3260535/).
+
+> Ethologist Konrad Lorenz suggested that certain infant characteristics evoke a positive affective response in the human. He described the **baby schema** (‘Kindchenschema’) as a set of infantile physical features such as the large head, high and protruding forehead, large eyes, chubby cheeks, small nose and mouth, short and thick extremities and plump body shape, that is perceived as cute or cuddly and elicits caretaking behavior from other individuals (Lorenz 1943).
+> 
+> (Baby Schema in Infant Faces Induces Cuteness Perception and Motivation for Caretaking in Adults, Glocker et al 2012, emphases mine)
+
+![](labubuimg.jpeg)
+
+Baby schema is commonly employed in robot design to make social robots appear friendly.
+By decapitating Labubus and reconstituing a new, less anthropomorphic form, we hope to subvert the aesthetic norms of social robotics and evoke a less straightforward, more confusing set of feelings in the viewer.
+We pay homage to Mary Shelley's Frankenstein, which is also a monster comprised of corpses.
+
+By presenting Labububot as an indisputably monstrous social robot we hope to call into question the monstrosity of other social robots, even those which are designed to look [cute and, therefore, trustworthy](https://journals.sagepub.com/doi/10.1177/17298806231168486).
+Further, we hope that analyzing social robots through the lens of monster theory will afford interesting insight into not only the design of social robots but also the philosophical question: what does it mean to be human?
+
+## future work
+* Cover Labububot in fur
+* Controls: servo actuation -> rolling in a desired movement direction
+* Continue inquiry into monster theory, posthumanism, social robotics, refine interactions and submit Labububot to [ICSR Art / Design Competition](https://icsr2026.uk/competition/) or other art / robotics venue
 
 # software
-
 ## server quickstart
-make sure ur in `labububot/server`
-### Option 1: Using npx (Node.js)
+navigate to `labububot/server`, then run:
 ```bash
 npx http-server -p 8080
 ```
-
-### Option 2: Using Python
+or
 ```bash
 python3 -m http.server 8080
 ```
@@ -80,40 +125,37 @@ has browser UI: see `ping.html`
 
 for one bubu:
 1. truncate 2-directional servo arm to fit into arm piece
-![](img/step1.jpeg)
+![](images/step1.jpeg)
 2. screw m3 x 10 shcs in through arm and servo arm
-![](img/step2.jpeg)
+![](images/step2.jpeg)
 3. drill chubby chonky heavy boys into face plate
-![](img/step3.jpeg)
+![](images/step3.jpeg)
 4. hot glue time - **MAKE SURE ORIENTATION OF FACE PLATE IS CORRECT - screw holes on the side of the center protrusion should be away from the ears -- flat edge of center protrusion up, chamfered edge down; most important to vertically align face plate with labubu face.** 1 glue stick worth of glue injected from around the edges
-![](img/step4_back.jpeg)
-![](img/step4_front.jpeg)
+![](images/step4_back.jpeg)
+![](images/step4_front.jpeg)
 5. drill m4 x 35 into face plate holes to create threads, then undrill them
-![](img/step5.jpeg)
+![](images/step5.jpeg)
 6. position arm against face plate, use allen wrench to screw in m4 x 35s + washers through arm first, then face plate - approximate 3.5mm of overhang, align slot
-![](img/step6_overhang.jpeg)
-![](img/step6.jpeg)
+![](images/step6_overhang.jpeg)
+![](images/step6.jpeg)
 7. put arm on servo, screw m3x10 in to secure (we didn't do it in this order so no fotos)
 8. ==TODO: stuff and sew labubu==
 9. shove servo into servo slot, on clamshell which has a cutout for the wire. position wire side in slot and then shove the boy in
-![](img/step9_insertion.jpeg)
-![](img/step9_wirehole.jpeg)
+![](images/step9_insertion.jpeg)
+![](images/step9_wirehole.jpeg)
 10. zip tie wire through zip tie slot so that wire is secure, but leave slack so wire doesn't pull on servo. cut zip tie
-![](img/step10.jpeg)
+![](images/step10.jpeg)
 
 **first all 12 first halves, then zero servos before assembling second halves**
 
 11. put both halves together. screw 4 m3 x 18 via allen wrench. in the other two holes, screw 2 m3 x 10 via allen wrench. tighten all together to secure two halves, until gap is closed - DON'T OVERTIGHTEN
 here are the holes for the m3x18:
-![](img/step11_m3_18.jpeg)
+![](images/step11_m3_18.jpeg)
 here are the holes for the m3x10:
-![](img/step11_m3_10.jpeg)
+![](images/step11_m3_10.jpeg)
 
 
 # references
 * [ben and dimitar's neilbot board](https://gitlab.cba.mit.edu/classes/863.25/CBA/cba-machine/-/tree/main/hardware/main)
-
-# things we need to buy or find
-* buck converters
-* 2 spoots PETG
-* mf glue 
+* [neilbot](https://fab.cba.mit.edu/classes/MAS.863/CBA/neilbot/index.html)
+* [miranda's neilbot docs](https://fab.cba.mit.edu/classes/863.25/people/MirandaLi/pages/week11.html)
