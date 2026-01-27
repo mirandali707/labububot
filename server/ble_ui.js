@@ -35,9 +35,29 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
     });
 
+    // Parse quaternion from IMU data string
+    function parseQuaternion(data) {
+        const quatMatch = data.match(/\/quat\/([\d.-]+)\/([\d.-]+)\/([\d.-]+)\/([\d.-]+)/);
+        if (quatMatch) {
+            const x = parseFloat(quatMatch[1]);
+            const y = parseFloat(quatMatch[2]);
+            const z = parseFloat(quatMatch[3]);
+            const w = parseFloat(quatMatch[4]);
+            return { x, y, z, w };
+        }
+        return null;
+    }
+
     // Callback for received data
     function handleDataReceived(text) {
         console.log('Data received:', text);
         retrievedValue.innerHTML = text;
+        
+        // Parse and apply quaternion rotation
+        const quat = parseQuaternion(text);
+        if (quat && window.updateMeshRotation) {
+            const quaternion = new THREE.Quaternion(quat.x, quat.y, quat.z, quat.w);
+            window.updateMeshRotation(quaternion);
+        }
     }
 });

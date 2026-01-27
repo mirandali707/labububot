@@ -50,10 +50,13 @@
 
     addDodecahedronFaceNormals(mesh, scene);
 
+    // Expose function to update mesh rotation based on quaternion
+    window.updateMeshRotation = function(quaternion) {
+      mesh.quaternion.copy(quaternion);
+    };
+
     function animate() {
       requestAnimationFrame(animate);
-      mesh.rotation.y += 0.01;
-      mesh.rotation.x += 0.005;
       renderer.render(scene, camera);
     }
 

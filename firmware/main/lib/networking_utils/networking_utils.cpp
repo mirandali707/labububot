@@ -11,6 +11,7 @@ String format_imu_data(const int32_t accelerometer[3], const int32_t gyroscope[3
     result += gyroscope[1]; result += "/";
     result += gyroscope[2]; result += "/";
     result += "quat/";
+    // quaternion is in the order x, y, z, w
     result += quaternions[0]; result += "/";
     result += quaternions[1]; result += "/";
     result += quaternions[2]; result += "/";
