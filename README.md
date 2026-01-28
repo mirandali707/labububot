@@ -1,4 +1,4 @@
-# mf labubu
+# labububot
 
 Labububot (they/them) is a 12-headed, spherical robot.
 
