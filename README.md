@@ -36,7 +36,7 @@ If this is true, our world of human cyborgs will soon confront a new, baffling s
 
 We claim that social robots can be analyzed as monsters: for example, a disembodied, illuminated face that hides a camera, which blinks its digital eyes at you, records your speech, and metabolizes it through a large language model before playing back a synthesized "speech" waveform arguably "should not be" according to the laws of God or nature, but nevertheless is.
 
-![](furhat.jpg)
+![](images/furhat.jpg)
 
 ... not to name names.
 
@@ -47,7 +47,7 @@ Labubu is also a classic example of [baby schema](https://pmc.ncbi.nlm.nih.gov/a
 > 
 > (Baby Schema in Infant Faces Induces Cuteness Perception and Motivation for Caretaking in Adults, Glocker et al 2012, emphases mine)
 
-![](labubuimg.jpeg)
+![](images/labubuimg.jpeg)
 
 Baby schema is commonly employed in robot design to make social robots appear friendly.
 By decapitating Labubus and reconstituing a new, less anthropomorphic form, we hope to subvert the aesthetic norms of social robotics and evoke a less straightforward, more confusing set of feelings in the viewer.
