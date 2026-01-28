@@ -1,6 +1,6 @@
 # labububot
 
-Labububot (they/them) is a 12-headed, spherical robot.
+Labububot (they/them) is a 12-headed, spherical robot. 
 
 https://github.com/user-attachments/assets/dadfb60f-6797-4210-bd5c-d21815fad00e
 
@@ -9,6 +9,7 @@ https://github.com/user-attachments/assets/a78946b9-4492-444b-ae28-aa99f99fa427
 https://github.com/user-attachments/assets/b0edc415-2791-42cc-b36b-7b1b4265cd20
 
 ## progress (reverse chronological)
+This was all done during the [2026 MIT Media Lab Research at Scale Residency](https://www.media.mit.edu/posts/research-at-scale/) in Shenzhen, China. 
 
 https://github.com/user-attachments/assets/68c9fd3b-862c-404a-a182-f51555a04e33
 
@@ -59,7 +60,7 @@ Further, we hope that analyzing social robots through the lens of monster theory
 ## future work
 * Cover Labububot in fur
 * Controls: servo actuation -> rolling in a desired movement direction
-* Continue inquiry into monster theory, posthumanism, social robotics, refine interactions and submit Labububot to [ICSR Art / Design Competition](https://icsr2026.uk/competition/) or other art / robotics venue
+* Continue inquiry into monster theory, posthumanism, social robotics, refine interactions 
 
 # software
 ## server quickstart
