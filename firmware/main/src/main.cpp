@@ -23,6 +23,13 @@ void handle_command(const String& received_msg){
       int angle = parts[2].toInt();
       set_servo_angle(servoId, angle);
   }
+  else if (parts[0] == "setall") {
+      int angle = parts[1].toInt();
+      for (int i = 0; i < N_SERVOS; i++) {
+        // servo IDs are 0 indexed
+        set_servo_angle(i, angle);
+      }
+  }
   // stop
   else if (parts[0] == "stop") {
       sweepServoId = -1;
@@ -32,13 +39,20 @@ void handle_command(const String& received_msg){
         set_servo_angle(i, stopAngle);
       }
   }
-  else if (parts[0] == "sweep") {
-    int servoId = parts[1].toInt();
-    sweepServoId = servoId;
-    sweepAngle = 0;
-    sweepDirection = 1;
-    lastSweepTime = millis();
-  }
+  // else if (parts[0] == "sweep") {
+  //   int servoId = parts[1].toInt();
+  //   sweepServoId = servoId;
+  //   sweepAngle = 0;
+  //   sweepDirection = 1;
+  //   lastSweepTime = millis();
+  // }
+  // else if (parts[0] == "stall") {
+  //     int stallAngle = 0;
+  //     for (int i = 0; i < N_SERVOS; i++) {
+  //       // servo IDs are 0 indexed
+  //       set_servo_angle(i, stallAngle);
+  //     }
+  // }
 }
 
 void send_imu_data_to_browser(){
