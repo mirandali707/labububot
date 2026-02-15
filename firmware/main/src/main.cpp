@@ -9,7 +9,6 @@
 // sweep state tracking
 bool sweepAll = false;
 int sweepStepSize = 5;
-int sweepServoId = -1;  // -1 means no sweep active
 int sweepAngle = 0;
 int sweepDirection = 1;  // 1 for increasing, -1 for decreasing
 unsigned long lastSweepTime = 0;
@@ -35,7 +34,6 @@ void handle_command(const String& received_msg){
   // stop
   else if (parts[0] == "stop") {
       sweepAll = false;
-      sweepServoId = -1;
       int stopAngle = 60;
       for (int i = 0; i < N_SERVOS; i++) {
         // servo IDs are 0 indexed
