@@ -44,20 +44,13 @@ void handle_command(const String& received_msg){
   }
   else if (parts[0] == "sweepall") {
     sweepAll = true;
-    // if (sizeof(parts) > 1){
-    //   sweepStepSize = parts[1].toInt();
-    // }
+    if (parts.size() > 1){
+      sweepStepSize = parts[1].toInt();
+    }
     sweepAngle = 0;
     sweepDirection = 1;
     lastSweepTime = millis();
   }
-  // else if (parts[0] == "stall") {
-  //     int stallAngle = 0;
-  //     for (int i = 0; i < N_SERVOS; i++) {
-  //       // servo IDs are 0 indexed
-  //       set_servo_angle(i, stallAngle);
-  //     }
-  // }
 }
 
 void send_imu_data_to_browser(){
