@@ -6,6 +6,13 @@
 #include <servo.h>
 #include <networking_utils.h>
 
+// sweep state tracking
+int sweepServoId = -1;  // -1 means no sweep active
+int sweepAngle = 0;
+int sweepDirection = 1;  // 1 for increasing, -1 for decreasing
+unsigned long lastSweepTime = 0;
+const unsigned long SWEEP_INTERVAL = 50;  // milliseconds between angle updates
+
 // handle browser commands
 void handle_command(const String& received_msg){
   // received message is a /-delimited string, e.g.
@@ -15,6 +22,22 @@ void handle_command(const String& received_msg){
       int servoId = parts[1].toInt();
       int angle = parts[2].toInt();
       set_servo_angle(servoId, angle);
+  }
+  // stop
+  else if (parts[0] == "stop") {
+      sweepServoId = -1;
+      int stopAngle = 60;
+      for (int i = 0; i < N_SERVOS; i++) {
+        // servo IDs are 0 indexed
+        set_servo_angle(i, stopAngle);
+      }
+  }
+  else if (parts[0] == "sweep") {
+    int servoId = parts[1].toInt();
+    sweepServoId = servoId;
+    sweepAngle = 0;
+    sweepDirection = 1;
+    lastSweepTime = millis();
   }
 }
 

@@ -6,6 +6,8 @@
 #define SDA_PIN 5
 #define SCL_PIN 6
 
+#define N_SERVOS 12
+
 extern Adafruit_PWMServoDriver pwm;
 
 void servo_driver_init();
