@@ -26,3 +26,7 @@ void servo_driver_init(){
 void set_servo_angle(uint8_t servo_num, uint16_t angle){
     pwm.setPWM(servo_num, 0, angleToPulse(angle));
 }
+
+void set_servo_us(uint8_t servo_num, uint16_t us){
+    pwm.writeMicroseconds(servo_num, us);
+}

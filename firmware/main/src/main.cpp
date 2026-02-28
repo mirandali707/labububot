@@ -24,6 +24,11 @@ void handle_command(const String& received_msg){
       int angle = parts[2].toInt();
       set_servo_angle(servoId, angle);
   }
+  else if (parts[0] == "us") {
+      int servoId = parts[1].toInt();
+      int us = parts[2].toInt();
+      set_servo_us(servoId, us);
+  }
   else if (parts[0] == "setall") {
       int angle = parts[1].toInt();
       for (int i = 0; i < N_SERVOS; i++) {
