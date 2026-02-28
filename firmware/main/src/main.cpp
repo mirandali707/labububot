@@ -40,6 +40,7 @@ void handle_command(const String& received_msg){
         set_servo_angle(i, stopAngle);
       }
   }
+  // sweepall
   else if (parts[0] == "sweepall") {
     sweepAll = true;
     if (parts.size() > 1){
@@ -58,9 +59,6 @@ void send_imu_data_to_browser(){
 void setup()
 {
   Serial.begin(115200);
-  while (!Serial) {
-    yield();
-  }
 
   ble_init(handle_command); // initialize BLE with function to handle messages received from browser
 
