@@ -50,6 +50,8 @@ void ble_init(
   Serial.println("Setting up BLE...");
   // Create the BLE Device
   BLEDevice::init("ESP32");
+  // BLEDevice::init("labububot");
+  // BLEDevice::init("devbot");
 
   // Create the BLE Server
   pServer = BLEDevice::createServer();

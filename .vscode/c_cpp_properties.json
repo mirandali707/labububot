@@ -6,7 +6,8 @@
                 "${workspaceFolder}/**",
                 "/Users/miranda/Library/Arduino15/packages/**",
                 "/Users/miranda/Library/Arduino15/libraries/**",
-                "/Users/miranda/Documents/Arduino/libraries/**"
+                "/Users/miranda/Documents/Arduino/libraries/**",
+                "/Users/miranda/code/mit/iap26/labububot/firmware/main/lib/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

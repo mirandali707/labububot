@@ -1,5 +1,5 @@
-#ifndef BLESETUP_H
-#define BLESETUP_H
+#ifndef BLE_H 
+#define BLE_H
 #include <functional>
 #include <Arduino.h>
 
