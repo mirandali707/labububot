@@ -58,7 +58,11 @@ void loop()
   handle_connect();
   handle_disconnect();
 
+  // imu data
   update_imu_data();
   print_imu_data();
   send_imu_data_to_browser();
+
+  // servo sweepage
+  update_active_sweeps();
 }

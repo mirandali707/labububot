@@ -29,16 +29,42 @@ uint16_t angleToPulse(uint16_t angle) {
 }
 // END probably deprecated
 
+/**
+ * creates a pointer to a new SweepCmd object at the (servo_id-1)th position in servo_statuses
+ * @param servo_id is the 1-indexed face ID
+ */
 void init_sweep(int servo_id){
-    /***
-     * servo ID is the 1-indexed face ID
-     * creates a pointer to a new SweepCmd object at the (servo_id-1)th position in servo_statuses
-     */
     if (servo_statuses[servo_id - 1] != nullptr) {
         // TODO handle sweep command overwrite better later
         delete servo_statuses[servo_id - 1];
     }
     servo_statuses[servo_id - 1] = new SweepCmd();
+}
+
+/**
+ * checks servo_statuses for non-null SweepCmd ptrs; 
+ * updates SweepCmd by going in the direction of the sweep by `rate`, and changing sweep direction / ending sweep if conditions are met
+ */
+void update_active_sweeps(){
+    for (int i = 0; i < N_SERVOS; i++) {
+        if (servo_statuses[i] != nullptr) {
+            SweepCmd* cmd = servo_statuses[i];
+            int servo_id = i + 1;
+            int pwm_id = SERVO_ID_TO_PWM_ID[servo_id];
+            // update PWM us value:
+            // decrement by `rate` if we are sweeping outwards, increment by `rate` if we are sweeping inwards
+            int new_pwm = cmd->sweep_out ? cmd->curr_pwm - cmd->rate : cmd->curr_pwm + cmd->rate;
+            set_servo_us(pwm_id, new_pwm);
+            cmd->curr_pwm = new_pwm;
+            if (cmd->sweep_out && new_pwm <= cmd->pwm_out_max) {
+                cmd->sweep_out = false;
+            }
+            if (!cmd->sweep_out && new_pwm >= cmd->pwm_in_max) {
+                delete cmd;
+                servo_statuses[i] = nullptr;
+            }
+        }
+    }
 }
 
 void servo_driver_init(){

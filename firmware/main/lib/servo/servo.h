@@ -11,7 +11,7 @@
 
 #define PWM_MIN 1600 // all the way out
 #define PWM_MAX 2100 // all the way in
-#define DEFAULT_SERVO_RATE 100
+#define DEFAULT_SERVO_RATE 50
 
 struct SweepCmd{
     bool sweep_out = true;
@@ -28,3 +28,4 @@ void servo_driver_init();
 void set_servo_angle(uint8_t servo_num, uint16_t angle);
 void set_servo_us(uint8_t servo_num, uint16_t microseconds); // TODO later change to percent of max / min, factor in tuned servo biases
 void init_sweep(int servo_id);
+void update_active_sweeps();
