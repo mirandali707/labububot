@@ -1,4 +1,5 @@
 // Minimal Three.js sketch: renders a single dodecahedron
+import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
 
 (() => {
   const canvasId = 'threeCanvas';
@@ -61,7 +62,7 @@
     scene.add(dir);
 
     const radius = 1.0;
-    const geom = new THREE.DodecahedronGeometry(radius);
+    const geom = new FlatDodecahedronGeometry(radius);
     geom.computeVertexNormals(); 
     const mat = new THREE.MeshStandardMaterial({ color: 0xfa87ce, flatShading: true });
     const mesh = new THREE.Mesh(geom, mat);
