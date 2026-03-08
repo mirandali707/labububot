@@ -36,6 +36,24 @@
     camera.position.set(3, 2.5, 3);
     camera.lookAt(0, 0, 0);
 
+    // OrbitControls (requires OrbitControls script included in the page)
+    let controls;
+    // if (THREE.OrbitControls) {
+    //   controls = new THREE.OrbitControls(camera, renderer.domElement);
+    //   controls.enableDamping = true;
+    //   controls.dampingFactor = 0.05;
+    //   controls.screenSpacePanning = false;
+    //   controls.minDistance = 1;
+    //   controls.maxDistance = 10;
+    //   controls.target.set(0, 0, 0);
+    //   controls.update();
+    // }
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.enableZoom = true;
+    controls.target.set(0, 0, 0); // Look at origin
+
     const ambient = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambient);
     const dir = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -142,6 +160,8 @@
 
     function animate() {
       requestAnimationFrame(animate);
+      // if (controls) controls.update();
+      controls.update();
       renderer.render(scene, camera);
     }
 
