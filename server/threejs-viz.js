@@ -102,9 +102,9 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
     });
 
     // Add face labels
-    const letters = 'ABCDEFGHIJKL';
+    const face_nums = [9, 8, 7, 11, 3, 12, 10, 4, 2, 5, 6, 1];
     faceCenters.forEach((center, index) => {
-      const label = createTextSprite(letters[index], 0x000000);
+      const label = createTextSprite(face_nums[index], 0x000000);
       label.position.copy(center).multiplyScalar(1.05); // slightly outside the surface
       mesh.add(label);
     });
