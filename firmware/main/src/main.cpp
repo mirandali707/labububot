@@ -47,7 +47,7 @@ void setup()
 
   ble_init(handle_command); // initialize BLE with function to handle messages received from browser
 
-  imu_init(); // TODO rename to imu_init
+  imu_init();
 
   servo_driver_init(); // initialize PCA9685 PWM servo driver
 }
