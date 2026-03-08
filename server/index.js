@@ -9,6 +9,22 @@ async function sendSweepCommand(faceId) {
     }
 }
 
+// Send a roll command using the currently-detected bottom face
+async function sendRollCommand() {
+    const face = window.bottomFaceNumber;
+    if (face === null || typeof face === 'undefined') {
+        alert('No bottom face detected yet.');
+        return;
+    }
+    const message = `sweep/${face}`;
+    try {
+        await BLE.send(message);
+    } catch (error) {
+        console.error('Failed to send roll message:', error);
+        alert('Failed to send roll message: ' + error.message);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", (event) => {
     // Bottom face display: update when threejs dispatches event
     const bottomSpan = document.getElementById('bottomFaceNumber');
