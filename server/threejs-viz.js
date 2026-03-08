@@ -49,6 +49,47 @@
     const mesh = new THREE.Mesh(geom, mat);
     scene.add(mesh);
 
+    // Compute face centers
+    const positions = geom.attributes.position.array;
+    const faceGroups = {};
+    if (geom.index) {
+      const indices = geom.index.array;
+      for (let i = 0; i < indices.length; i += 3) {
+        const a = indices[i], b = indices[i+1], c = indices[i+2];
+        const va = new THREE.Vector3(positions[a*3], positions[a*3+1], positions[a*3+2]);
+        const vb = new THREE.Vector3(positions[b*3], positions[b*3+1], positions[b*3+2]);
+        const vc = new THREE.Vector3(positions[c*3], positions[c*3+1], positions[c*3+2]);
+        const center = new THREE.Vector3().addVectors(va, vb).add(vc).divideScalar(3);
+        const normal = new THREE.Vector3().crossVectors(vb.clone().sub(va), vc.clone().sub(va)).normalize();
+        const key = `${Math.round(normal.x*1000)},${Math.round(normal.y*1000)},${Math.round(normal.z*1000)}`;
+        if (!faceGroups[key]) faceGroups[key] = [];
+        faceGroups[key].push(center);
+      }
+    } else {
+      for (let i = 0; i < positions.length; i += 9) {
+        const va = new THREE.Vector3(positions[i], positions[i+1], positions[i+2]);
+        const vb = new THREE.Vector3(positions[i+3], positions[i+4], positions[i+5]);
+        const vc = new THREE.Vector3(positions[i+6], positions[i+7], positions[i+8]);
+        const center = new THREE.Vector3().addVectors(va, vb).add(vc).divideScalar(3);
+        const normal = new THREE.Vector3().crossVectors(vb.clone().sub(va), vc.clone().sub(va)).normalize();
+        const key = `${Math.round(normal.x*1000)},${Math.round(normal.y*1000)},${Math.round(normal.z*1000)}`;
+        if (!faceGroups[key]) faceGroups[key] = [];
+        faceGroups[key].push(center);
+      }
+    }
+    const faceCenters = Object.values(faceGroups).map(centers => {
+      const sum = centers.reduce((acc, c) => acc.add(c), new THREE.Vector3());
+      return sum.divideScalar(centers.length);
+    });
+
+    // Add face labels
+    const letters = 'ABCDEFGHIJKL';
+    faceCenters.forEach((center, index) => {
+      const label = createTextSprite(letters[index], 0x000000);
+      label.position.copy(center).multiplyScalar(1.05); // slightly outside the surface
+      mesh.add(label);
+    });
+
     // Create arrow helper for gravity vector
     const gravityArrow = new THREE.ArrowHelper(
       new THREE.Vector3(0, 0, 1),
