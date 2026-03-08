@@ -33,8 +33,7 @@ void handle_command(const String& received_msg){
   }
   else if (parts[0] == "sweep") {
       int servo_id = parts[1].toInt();
-      int pwm_id = SERVO_ID_TO_PWM_ID[servo_id];
-      // TODO
+      init_sweep(servo_id);
   }
 }
 
