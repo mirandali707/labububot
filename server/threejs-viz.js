@@ -124,6 +124,12 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
     // Keep triangles per face so we can color their vertices later
     const faceTriangles = Object.values(faceGroups).map(group => group.triangles);
 
+    // Face numbering mapping (corresponds to faceCenters order)
+    const face_nums = [9, 8, 7, 11, 3, 12, 10, 4, 2, 5, 6, 1];
+
+    // Expose bottom face number globally (initially unknown)
+    window.bottomFaceNumber = null;
+
     // Prepare a color attribute (one color per vertex)
     const colors = new Float32Array(positions.length);
     for (let i = 0; i < positions.length; i += 3) {
@@ -156,10 +162,16 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
       }
       colorAttr.needsUpdate = true;
       highlightedFaceIndex = highlightIndex;
+      // Update global bottom-face variable and notify listeners
+      window.bottomFaceNumber = (highlightIndex >= 0 && typeof face_nums !== 'undefined') ? face_nums[highlightIndex] : null;
+      try {
+        window.dispatchEvent(new CustomEvent('bottomFaceChanged', { detail: { face: window.bottomFaceNumber } }));
+      } catch (e) {
+        // ignore if environment doesn't support CustomEvent
+      }
     }
 
     // Add face labels
-    const face_nums = [9, 8, 7, 11, 3, 12, 10, 4, 2, 5, 6, 1];
     faceCenters.forEach((center, index) => {
       const label = createTextSprite(face_nums[index], 0x000000);
       label.position.copy(center).multiplyScalar(1.05); // slightly outside the surface
