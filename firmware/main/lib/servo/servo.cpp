@@ -2,6 +2,24 @@
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x7F);
 
+SweepCmd* servo_statuses[N_SERVOS] = {nullptr};
+
+std::map<int, int> SERVO_ID_TO_PWM_ID = {
+    {1, 8},
+    {2, 9},
+    {3, 10},
+    {4, 11},
+    {5, 12},
+    {6, 13},
+    {7, 0},
+    {8, 1},
+    {9, 2},
+    {10, 3},
+    {11, 4},
+    {12, 5}
+};
+
+// probably deprecated; from when i was using set_servo_angle which i should not do anymore
 uint16_t pulseMin = 205;  // 1000 µs
 uint16_t pulseMax = 410;  // 2000 µs
 

@@ -12,21 +12,29 @@ void handle_command(const String& received_msg){
   // set/0/60 means "set servo with idx 0 to angle 60 degrees"
   auto parts = parse_cmd(received_msg);
   if (parts[0] == "set") {
-      int servoId = parts[1].toInt();
+      int servo_id = parts[1].toInt();
+      int pwm_id = SERVO_ID_TO_PWM_ID[servo_id];
       int angle = parts[2].toInt();
-      set_servo_angle(servoId, angle);
+      set_servo_angle(pwm_id, angle);
   }
   else if (parts[0] == "us") {
-      int servoId = parts[1].toInt();
+    // us/{bubu face id}/{pwm value, in us}
+      int servo_id = parts[1].toInt();
+      int pwm_id = SERVO_ID_TO_PWM_ID[servo_id];
       int us = parts[2].toInt();
-      set_servo_us(servoId, us);
+      set_servo_us(pwm_id, us);
   }
   else if (parts[0] == "setall") {
       int angle = parts[1].toInt();
       for (int i = 0; i < N_SERVOS; i++) {
-        // servo IDs are 0 indexed
+        // pwm IDs are 0 indexed
         set_servo_angle(i, angle);
       }
+  }
+  else if (parts[0] == "sweep") {
+      int servo_id = parts[1].toInt();
+      int pwm_id = SERVO_ID_TO_PWM_ID[servo_id];
+      // TODO
   }
 }
 
