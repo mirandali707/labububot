@@ -64,13 +64,19 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
     const radius = 1.0;
     const geom = new FlatDodecahedronGeometry(radius);
     geom.computeVertexNormals(); 
-    const mat = new THREE.MeshStandardMaterial({ color: 0xfa87ce, flatShading: true });
+
+    // Colors: default and highlight
+    const defaultColor = new THREE.Color(0xfa87ce);
+    const highlightColor = new THREE.Color(0x00ff00);
+
+    // Use vertex colors so we can color faces individually
+    const mat = new THREE.MeshStandardMaterial({ vertexColors: true, flatShading: true });
     const mesh = new THREE.Mesh(geom, mat);
     scene.add(mesh);
 
-    // Compute face centers
+    // Compute face centers, normals and triangle vertex indices grouped by face
     const positions = geom.attributes.position.array;
-    const faceGroups = {};
+    const faceGroups = {}; // key -> { centers: [], normals: [], triangles: [] }
     if (geom.index) {
       const indices = geom.index.array;
       for (let i = 0; i < indices.length; i += 3) {
@@ -81,25 +87,76 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
         const center = new THREE.Vector3().addVectors(va, vb).add(vc).divideScalar(3);
         const normal = new THREE.Vector3().crossVectors(vb.clone().sub(va), vc.clone().sub(va)).normalize();
         const key = `${Math.round(normal.x*1000)},${Math.round(normal.y*1000)},${Math.round(normal.z*1000)}`;
-        if (!faceGroups[key]) faceGroups[key] = [];
-        faceGroups[key].push(center);
+        if (!faceGroups[key]) faceGroups[key] = { centers: [], normals: [], triangles: [] };
+        faceGroups[key].centers.push(center);
+        faceGroups[key].normals.push(normal);
+        faceGroups[key].triangles.push([a, b, c]);
       }
     } else {
       for (let i = 0; i < positions.length; i += 9) {
+        const aIndex = (i / 3);
+        const bIndex = aIndex + 1;
+        const cIndex = aIndex + 2;
         const va = new THREE.Vector3(positions[i], positions[i+1], positions[i+2]);
         const vb = new THREE.Vector3(positions[i+3], positions[i+4], positions[i+5]);
         const vc = new THREE.Vector3(positions[i+6], positions[i+7], positions[i+8]);
         const center = new THREE.Vector3().addVectors(va, vb).add(vc).divideScalar(3);
         const normal = new THREE.Vector3().crossVectors(vb.clone().sub(va), vc.clone().sub(va)).normalize();
         const key = `${Math.round(normal.x*1000)},${Math.round(normal.y*1000)},${Math.round(normal.z*1000)}`;
-        if (!faceGroups[key]) faceGroups[key] = [];
-        faceGroups[key].push(center);
+        if (!faceGroups[key]) faceGroups[key] = { centers: [], normals: [], triangles: [] };
+        faceGroups[key].centers.push(center);
+        faceGroups[key].normals.push(normal);
+        faceGroups[key].triangles.push([aIndex, bIndex, cIndex]);
       }
     }
-    const faceCenters = Object.values(faceGroups).map(centers => {
-      const sum = centers.reduce((acc, c) => acc.add(c), new THREE.Vector3());
-      return sum.divideScalar(centers.length);
+
+    const faceCenters = Object.values(faceGroups).map(group => {
+      const sum = group.centers.reduce((acc, c) => acc.add(c.clone()), new THREE.Vector3());
+      return sum.divideScalar(group.centers.length);
     });
+
+    // Average normals per face group
+    const faceNormals = Object.values(faceGroups).map(group => {
+      const sumN = group.normals.reduce((acc, n) => acc.add(n.clone()), new THREE.Vector3());
+      return sumN.divideScalar(group.normals.length).normalize();
+    });
+
+    // Keep triangles per face so we can color their vertices later
+    const faceTriangles = Object.values(faceGroups).map(group => group.triangles);
+
+    // Prepare a color attribute (one color per vertex)
+    const colors = new Float32Array(positions.length);
+    for (let i = 0; i < positions.length; i += 3) {
+      colors[i] = defaultColor.r;
+      colors[i+1] = defaultColor.g;
+      colors[i+2] = defaultColor.b;
+    }
+    const colorAttr = new THREE.BufferAttribute(colors, 3);
+    geom.setAttribute('color', colorAttr);
+    let highlightedFaceIndex = -1;
+
+    function setFaceColors(highlightIndex) {
+      // reset to default
+      for (let i = 0; i < colors.length; i += 3) {
+        colors[i] = defaultColor.r;
+        colors[i+1] = defaultColor.g;
+        colors[i+2] = defaultColor.b;
+      }
+      if (highlightIndex >= 0) {
+        const tris = faceTriangles[highlightIndex];
+        for (let t = 0; t < tris.length; t++) {
+          const tri = tris[t];
+          for (let vi = 0; vi < 3; vi++) {
+            const vIndex = tri[vi];
+            colors[vIndex * 3] = highlightColor.r;
+            colors[vIndex * 3 + 1] = highlightColor.g;
+            colors[vIndex * 3 + 2] = highlightColor.b;
+          }
+        }
+      }
+      colorAttr.needsUpdate = true;
+      highlightedFaceIndex = highlightIndex;
+    }
 
     // Add face labels
     const face_nums = [9, 8, 7, 11, 3, 12, 10, 4, 2, 5, 6, 1];
@@ -152,9 +209,26 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
     // Expose function to update gravity vector
     window.updateGravityVector = function(gx, gy, gz) {
       const gravityMagnitude = Math.sqrt(gx * gx + gy * gy + gz * gz);
+      // // World gravity direction
+      // const worldDir = new THREE.Vector3(gx, gy, gz).normalize();
+      // Keep previous arrow behavior (rotate gravity by mesh quaternion for visualization)
       let direction = new THREE.Vector3(gx, gy, gz).normalize();
-      // Apply the mesh's current quaternion to rotate the gravity vector
       direction.applyQuaternion(mesh.quaternion);
+      // Transform each face normal into world/global space and compare with gravity
+      let bestIndex = -1;
+      let bestDot = -Infinity;
+      for (let i = 0; i < (faceNormals ? faceNormals.length : 0); i++) {
+        const globalNormal = faceNormals[i].clone().applyQuaternion(mesh.quaternion).normalize();
+        const d = globalNormal.dot(direction);
+        if (d > bestDot) {
+          bestDot = d;
+          bestIndex = i;
+        }
+      }
+      if (bestIndex !== highlightedFaceIndex) {
+        setFaceColors(bestIndex);
+      }
+
       gravityArrow.setDirection(direction);
       gravityArrow.setLength(Math.min(gravityMagnitude / 100, 3)); // Scale for visualization
     };
