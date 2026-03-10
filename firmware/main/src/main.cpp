@@ -35,6 +35,11 @@ void handle_command(const String& received_msg){
       int servo_id = parts[1].toInt();
       init_sweep(servo_id);
   }
+  else if (parts[0] == "sweepall") {
+      for (int servo_id = 1; servo_id <= N_SERVOS; servo_id++) {
+        init_sweep(servo_id);
+      }
+  }
 }
 
 void send_imu_data_to_browser(){

@@ -13,12 +13,24 @@
 #define PWM_MAX 2100 // all the way in
 #define DEFAULT_SERVO_RATE 50
 
+struct ServoPwmVals {
+    uint16_t ears_out;
+    uint16_t safe_out;
+    uint16_t safe_in;
+    uint16_t ears_in;
+};
+
+struct Step {
+    unsigned long time_ms;
+    int pwm;
+};
+
 struct SweepCmd{
-    bool sweep_out = true;
-    int curr_pwm = PWM_MAX;
-    int pwm_in_max = PWM_MAX; // TODO can put in individual tuned servo max later
-    int pwm_out_max = PWM_MIN; // TODO can put in individual tuned servo min later
-    int rate = DEFAULT_SERVO_RATE; // pwm microseconds to increment in each loop
+    unsigned long cmd_start_ms = millis(); // milliseconds since boot
+
+    static const int STEP_COUNT = 5; // CHANGE THIS IF WE ARE USING MORE STEPS!
+    Step steps[STEP_COUNT];
+    int next_step_index = 0;
 };
 
 extern Adafruit_PWMServoDriver pwm;
