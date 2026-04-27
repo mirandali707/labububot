@@ -1,15 +1,20 @@
 # labububot
 
-Labububot (they/them) is a 12-headed, spherical robot. 
+Labububot (they/them) is a 12-headed, spherical robot.
+
+![](labububot.jpg)
+
+Labububot is a finalist for the [ICSR 2026 Grand Challenge](https://icsr2026.uk/competition/)!
+Please watch the [video](https://drive.google.com/file/d/1V2-Nbswxzv5lpubCeHjSdjX3NCKavL78/view) and read more in the pdf in this repo -- `Labububot_ICSR_GrandChallenge.pdf`.
+
+## progress (reverse chronological)
+This was all done during the [2026 MIT Media Lab Research at Scale Residency](https://www.media.mit.edu/posts/research-at-scale/) in Shenzhen, China. 
 
 https://github.com/user-attachments/assets/dadfb60f-6797-4210-bd5c-d21815fad00e
 
 https://github.com/user-attachments/assets/a78946b9-4492-444b-ae28-aa99f99fa427
 
 https://github.com/user-attachments/assets/b0edc415-2791-42cc-b36b-7b1b4265cd20
-
-## progress (reverse chronological)
-This was all done during the [2026 MIT Media Lab Research at Scale Residency](https://www.media.mit.edu/posts/research-at-scale/) in Shenzhen, China. 
 
 https://github.com/user-attachments/assets/68c9fd3b-862c-404a-a182-f51555a04e33
 
@@ -23,7 +28,7 @@ https://github.com/user-attachments/assets/68c9fd3b-862c-404a-a182-f51555a04e33
 
 ![bububot](images/bubu_cell_proto.jpg)
 
-## concept
+## initial concept
 Labububot is a playful critique of social robots and their forms.
 
 <!-- Roboticists claim that the dawn of ubiquitous robots is imminent. -->
@@ -57,10 +62,6 @@ We pay homage to Mary Shelley's Frankenstein, which is also a monster comprised 
 By presenting Labububot as an indisputably monstrous social robot we hope to call into question the monstrosity of other social robots, even those which are designed to look [cute and, therefore, trustworthy](https://journals.sagepub.com/doi/10.1177/17298806231168486).
 Further, we hope that analyzing social robots through the lens of monster theory will afford interesting insight into not only the design of social robots but also the philosophical question: what does it mean to be human? And: what do the monsters we make show us about the monsters we are?
 
-## future work
-* Cover Labububot in fur
-* Controls: servo actuation -> rolling in a desired movement direction
-* Continue inquiry into monster theory, posthumanism, social robotics, refine interactions 
 
 # software
 ## server quickstart
