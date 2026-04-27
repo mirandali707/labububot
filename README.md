@@ -2,7 +2,7 @@
 
 Labububot (they/them) is a 12-headed, spherical robot.
 
-![](labububot.jpg)
+![](images/labububot.jpg)
 
 Labububot is a finalist for the [ICSR 2026 Grand Challenge](https://icsr2026.uk/competition/)!
 Please watch the [video](https://drive.google.com/file/d/1V2-Nbswxzv5lpubCeHjSdjX3NCKavL78/view) and read more in the pdf in this repo -- `Labububot_ICSR_GrandChallenge.pdf`.
