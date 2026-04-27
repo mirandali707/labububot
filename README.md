@@ -9,7 +9,16 @@ Labububot is a finalist for the [ICSR 2026 Grand Challenge](https://icsr2026.uk/
 Here is the [video](https://drive.google.com/file/d/1V2-Nbswxzv5lpubCeHjSdjX3NCKavL78/view) and the [2-page report we submitted](https://github.com/mirandali707/labububot/blob/7e0564c12f65dfec5cda93bc70a4c95cdf9a9404/Labububot_ICSR_GrandChallenge.pdf).
 
 ## progress (reverse chronological)
-This was all done during the [2026 MIT Media Lab Research at Scale Residency](https://www.media.mit.edu/posts/research-at-scale/) in Shenzhen, China. 
+
+![](images/video_bts.jpeg)
+
+![](images/fursuit.jpeg)
+
+![](images/dimitar_surgery.jpeg)
+
+![](images/labubu_suitcase.jpeg)
+
+The below was all done during the [2026 MIT Media Lab Research at Scale Residency](https://www.media.mit.edu/posts/research-at-scale/) in Shenzhen, China. 
 
 https://github.com/user-attachments/assets/dadfb60f-6797-4210-bd5c-d21815fad00e
 
