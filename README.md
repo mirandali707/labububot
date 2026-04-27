@@ -5,7 +5,7 @@ Labububot (they/them) is a 12-headed, spherical robot.
 ![](images/labububot.jpg)
 
 Labububot is a finalist for the [ICSR 2026 Grand Challenge](https://icsr2026.uk/competition/)!
-Please watch the [video](https://drive.google.com/file/d/1V2-Nbswxzv5lpubCeHjSdjX3NCKavL78/view) and read more in the pdf in this repo -- `Labububot_ICSR_GrandChallenge.pdf`.
+Here is the [video](https://drive.google.com/file/d/1V2-Nbswxzv5lpubCeHjSdjX3NCKavL78/view) and the [2-page report we submitted](https://github.com/mirandali707/labububot/blob/7e0564c12f65dfec5cda93bc70a4c95cdf9a9404/Labububot_ICSR_GrandChallenge.pdf).
 
 ## progress (reverse chronological)
 This was all done during the [2026 MIT Media Lab Research at Scale Residency](https://www.media.mit.edu/posts/research-at-scale/) in Shenzhen, China. 
