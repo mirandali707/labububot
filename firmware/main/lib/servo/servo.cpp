@@ -8,16 +8,16 @@ SweepCmd* servo_statuses[N_SERVOS] = {nullptr}; // indexed by servo_id - 1 (sinc
 int SERVO_ID_TO_PWM_ID[12] = { 
     /* 1  */ 13,
     /* 2  */ 14,
-    /* 3  */ 99,
-    /* 4  */ 99,
+    /* 3  */ 2,
+    /* 4  */ 6,
     /* 5  */ 12,
     /* 6  */ 11,
-    /* 7  */ 99,
+    /* 7  */ 3,
     /* 8  */ 15,
     /* 9  */ 10,
-    /* 10 */ 99,
-    /* 11 */ 99,
-    /* 12 */ 99
+    /* 10 */ 7,
+    /* 11 */ 4,
+    /* 12 */ 5
 };
 
 const ServoPwmVals SERVO_ID_TO_PWM_VALS[12] = {
