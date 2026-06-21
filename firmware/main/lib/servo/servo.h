@@ -34,7 +34,8 @@ struct SweepCmd{
 };
 
 extern Adafruit_PWMServoDriver pwm;
-extern std::map<int, int> SERVO_ID_TO_PWM_ID;
+// extern std::map<int, int> SERVO_ID_TO_PWM_ID;
+extern int SERVO_ID_TO_PWM_ID[12];
 
 void servo_driver_init();
 void set_servo_angle(uint8_t servo_num, uint16_t angle);

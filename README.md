@@ -73,6 +73,15 @@ By presenting Labububot as an indisputably monstrous social robot we hope to cal
 Further, we hope that analyzing social robots through the lens of monster theory will afford interesting insight into not only the design of social robots but also the philosophical question: what does it mean to be human? And: what do the monsters we make show us about the monsters we are?
 
 
+# maintenance
+## disassembly
+The best way to access Labububot's internals is to disassemble them into two halves.
+There should be yellow and red tape along the seam for most efficient disassembly / easiest access to the electronics, but in case that isn't there anymore, the two hemispheres include (look under the Labubu's chin for a label on the servo):
+1. Faces 3, 4, 7, 10, 11 (center), 12
+2. Faces 1, 2, 5, 6 (center), 8, 9
+The red tape flanks the side with the data and charge USB-C plugs and power switch.
+The data USB-C plug is directional - if you can't flash new code, try plugging in the USB-C the flipped by 180 degrees.
+
 # software
 ## server quickstart
 navigate to `labububot/server`, then run:

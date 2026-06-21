@@ -4,19 +4,20 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x7F);
 
 SweepCmd* servo_statuses[N_SERVOS] = {nullptr}; // indexed by servo_id - 1 (since servo_id is 1-indexed)
 
-std::map<int, int> SERVO_ID_TO_PWM_ID = {
-    {1, 8},
-    {2, 9},
-    {3, 10},
-    {4, 11},
-    {5, 12},
-    {6, 13},
-    {7, 0},
-    {8, 1},
-    {9, 2},
-    {10, 3},
-    {11, 4},
-    {12, 5}
+// indexed by servo_id - 1
+int SERVO_ID_TO_PWM_ID[12] = { 
+    /* 1  */ 13,
+    /* 2  */ 14,
+    /* 3  */ 99,
+    /* 4  */ 99,
+    /* 5  */ 12,
+    /* 6  */ 11,
+    /* 7  */ 99,
+    /* 8  */ 15,
+    /* 9  */ 10,
+    /* 10 */ 99,
+    /* 11 */ 99,
+    /* 12 */ 99
 };
 
 const ServoPwmVals SERVO_ID_TO_PWM_VALS[12] = {
@@ -77,8 +78,8 @@ void update_active_sweeps(){
     for (int i = 0; i < N_SERVOS; i++) {
         if (servo_statuses[i] != nullptr) {
             SweepCmd* cmd = servo_statuses[i];
-            int servo_id = i + 1;
-            int pwm_id = SERVO_ID_TO_PWM_ID[servo_id];
+            int servo_id = i;
+            int pwm_id = SERVO_ID_TO_PWM_ID[servo_id] - 1;
 
             unsigned long elapsed = millis() - cmd->cmd_start_ms;
             Step& next_step = cmd->steps[cmd->next_step_index];
