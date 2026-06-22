@@ -76,11 +76,18 @@ Further, we hope that analyzing social robots through the lens of monster theory
 # maintenance
 ## disassembly
 The best way to access Labububot's internals is to disassemble them into two halves.
-There should be yellow and red tape along the seam for most efficient disassembly / easiest access to the electronics, but in case that isn't there anymore, the two hemispheres include (look under the Labubu's chin for a label on the servo):
+There should be yellow and red tape and grey structural buttons (?) along the seam for most efficient disassembly / easiest access to the electronics, but in case that isn't there anymore, the two hemispheres include (look under the Labubu's chin for a label on the servo):
 1. Faces 3, 4, 7, 10, 11 (center), 12
 2. Faces 1, 2, 5, 6 (center), 8, 9
+The grey buttons with black Sharpie on them are attached to the internals.
 The red tape flanks the side with the data and charge USB-C plugs and power switch.
 The data USB-C plug is directional - if you can't flash new code, try plugging in the USB-C the flipped by 180 degrees.
+
+The recommended disassembly procedure is:
+1. Loosen the buttons within each hemisphere (non-perimeter buttons)
+2. Take black-marked buttons off
+3. Undo perimeter buttons
+4. CAREFULLY split into two halves - the servo wires are fragile and will disconnect if yoinked
 
 # software
 ## server quickstart
