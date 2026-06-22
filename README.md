@@ -76,6 +76,8 @@ Further, we hope that analyzing social robots through the lens of monster theory
 # maintenance
 ## disassembly
 The best way to access Labububot's internals is to disassemble them into two halves.
+First, remove all of the fur one Labubu at a time.
+
 There should be yellow and red tape and grey structural buttons (?) along the seam for most efficient disassembly / easiest access to the electronics, but in case that isn't there anymore, the two hemispheres include (look under the Labubu's chin for a label on the servo):
 1. Faces 3, 4, 7, 10, 11 (center), 12
 2. Faces 1, 2, 5, 6 (center), 8, 9
@@ -88,6 +90,25 @@ The recommended disassembly procedure is:
 2. Take black-marked buttons off
 3. Undo perimeter buttons
 4. CAREFULLY split into two halves - the servo wires are fragile and will disconnect if yoinked
+
+## reassembly
+To reassemble, you can do one of two things:
+
+Jake's Method
+1. Loosely position each outer / inner button in each socket along the bottom seam (skipping the ones attached to the internals) so that the bolts are in the right slot.
+2. Carefully place the top hemisphere on top of the bottom hemisphere.
+3. Going one button at a time, press / jiggle near the buttons so that the faces fall into place along the seam.
+4. Once all of the faces are slotted into the right buttons, tighten them all.
+
+Miranda & Dimitar's Method
+1. Hot glue the inner buttons into place.
+2. Carefully place the top hemisphere on top of the bottom hemisphere.
+3. Screw all of the missing buttons & their bolts in along the seam.
+4. Tighten all of the buttons. 
+
+Please try to keep the buttons color-coded as follows:
+Grey buttons along the seam, Sharpie-ed buttons attach to the internal unit with the electronics.
+Finally, reapply the fur patches.
 
 # software
 ## server quickstart
