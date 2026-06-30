@@ -25,6 +25,22 @@ async function sendRollCommand() {
     }
 }
 
+// Send a sweep command using the currently-detected top face
+async function sendGopherCommand() {
+    const face = window.topFaceNumber;
+    if (face === null || typeof face === 'undefined') {
+        alert('No top face detected yet.');
+        return;
+    }
+    const message = `sweep/${face}`;
+    try {
+        await BLE.send(message);
+    } catch (error) {
+        console.error('Failed to send gopher message:', error);
+        alert('Failed to send gopher message: ' + error.message);
+    }
+}
+
 function toggleContinuousRoll() {
     const continuousRollOn = window.continuousRollOn || false;
     // flip tha switch
@@ -34,8 +50,26 @@ function toggleContinuousRoll() {
     const modeSpan = document.getElementById('currentMode');
     if (!modeSpan) return;
     if (window.continuousRollOn){
+        window.gopherModeOn = false; // modes are mutually exclusive
         modeSpan.textContent = "roll";
         sendRollCommand();
+    } else {
+        modeSpan.textContent = "none";
+    }
+}
+
+function toggleGopherMode() {
+    const gopherModeOn = window.gopherModeOn || false;
+    // flip tha switch
+    window.gopherModeOn = !gopherModeOn;
+    console.log("gopher mode toggled to", window.gopherModeOn);
+
+    const modeSpan = document.getElementById('currentMode');
+    if (!modeSpan) return;
+    if (window.gopherModeOn){
+        window.continuousRollOn = false; // modes are mutually exclusive
+        modeSpan.textContent = "gopher";
+        sendGopherCommand();
     } else {
         modeSpan.textContent = "none";
     }
@@ -77,6 +111,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     // Listen for top face event from threejs-viz
     window.addEventListener('topFaceChanged', (e) => {
         updateTopFace(e.detail.face);
+        if (window.gopherModeOn){
+            // gopher mode is on, sweep new top face
+            const face = e.detail.face;
+            if (face !== null && typeof face !== 'undefined' && !sweepBusy) {
+                sweepBusy = true;
+                sendSweepCommand(face).finally(() => { sweepBusy = false; });
+            }
+        }
     });
     // If value already present on window, initialize display
     if (typeof window.bottomFaceNumber !== 'undefined') updateBottomFace(window.bottomFaceNumber);
