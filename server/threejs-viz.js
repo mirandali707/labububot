@@ -200,8 +200,19 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
 
     addDodecahedronFaceNormals(mesh, scene);
 
+    // --- IMU boresight calibration (shared across update + calibrate) ---
+    const calibrationOffset = new THREE.Quaternion();   // identity until calibrated
+    const lastRawQuat       = new THREE.Quaternion();   // pipeline output, pre-offset
+
+    const saved = localStorage.getItem('imuCalibrationOffset');
+    if (saved) {
+      try { calibrationOffset.fromArray(JSON.parse(saved)); }
+      catch (e) { console.warn('ignoring bad saved calibration', e); }
+    }
+
     // Expose function to update mesh rotation based on quaternion
     window.updateMeshRotation = function(quaternion) {
+
       // Rotate -90 degrees around X (swap Y/Z)
       const yzSwap = new THREE.Quaternion()
         .setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
@@ -217,7 +228,28 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
         .setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI);
       quaternion.premultiply(flip);
 
+      lastRawQuat.copy(quaternion);            // raw, before offset
+      quaternion.multiply(calibrationOffset);  // body-frame (right) correction
       mesh.quaternion.copy(quaternion);
+    };
+
+    window.calibrateLevel = function () {
+      const i = highlightedFaceIndex;
+      if (i < 0) { console.warn('rest the robot flat on a face first'); return; }
+
+      const qObs = lastRawQuat.clone();
+      const nWorld = faceNormals[i].clone().applyQuaternion(qObs).normalize();
+
+      // snap to NEAREST vertical, so we null the small tilt and never a 180° flip
+      const target = new THREE.Vector3(0, nWorld.y >= 0 ? 1 : -1, 0);
+      const qTilt  = new THREE.Quaternion().setFromUnitVectors(nWorld, target);
+
+      // world-frame tilt -> constant body-frame offset:  qObs⁻¹ · qTilt · qObs
+      const qOffset = qObs.clone().invert().multiply(qTilt).multiply(qObs);
+
+      calibrationOffset.copy(qOffset);
+      localStorage.setItem('imuCalibrationOffset', JSON.stringify(qOffset.toArray()));
+      console.log('calibrated against printed face', face_nums[i], '(geom index', i + ')');
     };
 
     // Expose function to update gravity vector
