@@ -25,6 +25,21 @@ async function sendRollCommand() {
     }
 }
 
+function toggleContinuousRoll() {
+    const continuousRollOn = window.continuousRollOn || false;
+    // flip tha switch
+    window.continuousRollOn = !continuousRollOn;
+    console.log("continuous roll mode toggled to", window.continuousRollOn);
+
+    const modeSpan = document.getElementById('currentMode');
+    if (!modeSpan) return;
+    if (window.continuousRollOn){
+        modeSpan.textContent = "roll";
+    } else {
+        modeSpan.textContent = "none";
+    }
+}
+
 document.addEventListener("DOMContentLoaded", (event) => {
     // Bottom face display: update when threejs dispatches event
     const bottomSpan = document.getElementById('bottomFaceNumber');
@@ -40,6 +55,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // console.log('down geometric index:', e.detail.index,
         //             '— currently mislabeled as', e.detail.face);
         updateBottomFace(e.detail.face);
+        if (window.continuousRollOn){
+            // continuous roll is on, sweep new bottom face
+            const face = e.detail.face;
+            if (face !== null && typeof face !== 'undefined') {
+                sendSweepCommand(face);
+            }
+        }
     });
     // If value already present on window, initialize display
     if (typeof window.bottomFaceNumber !== 'undefined') updateBottomFace(window.bottomFaceNumber);
