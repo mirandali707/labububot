@@ -125,7 +125,7 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
     const faceTriangles = Object.values(faceGroups).map(group => group.triangles);
 
     // Face numbering mapping (corresponds to faceCenters order)
-    const face_nums = [9, 8, 7, 11, 3, 12, 10, 4, 2, 5, 6, 1];
+    const face_nums = [10, 12, 7, 3, 1, 11, 4, 5, 2, 9, 8, 6];
 
     // Expose bottom face number globally (initially unknown)
     window.bottomFaceNumber = null;
@@ -165,7 +165,9 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
       // Update global bottom-face variable and notify listeners
       window.bottomFaceNumber = (highlightIndex >= 0 && typeof face_nums !== 'undefined') ? face_nums[highlightIndex] : null;
       try {
-        window.dispatchEvent(new CustomEvent('bottomFaceChanged', { detail: { face: window.bottomFaceNumber } }));
+        window.dispatchEvent(new CustomEvent('bottomFaceChanged', {
+          detail: { face: window.bottomFaceNumber, index: highlightIndex }
+        }));
       } catch (e) {
         // ignore if environment doesn't support CustomEvent
       }
