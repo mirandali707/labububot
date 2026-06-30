@@ -203,6 +203,7 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
     // --- IMU boresight calibration (shared across update + calibrate) ---
     const calibrationOffset = new THREE.Quaternion();   // identity until calibrated
     const lastRawQuat       = new THREE.Quaternion();   // pipeline output, pre-offset
+    window.imuRawQuat = lastRawQuat;   // live handle for the UI stillness check
 
     const saved = localStorage.getItem('imuCalibrationOffset');
     if (saved) {
@@ -233,23 +234,56 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
       mesh.quaternion.copy(quaternion);
     };
 
-    window.calibrateLevel = function () {
-      const i = highlightedFaceIndex;
-      if (i < 0) { console.warn('rest the robot flat on a face first'); return; }
+    let calibSamples = [];
 
-      const qObs = lastRawQuat.clone();
-      const nWorld = faceNormals[i].clone().applyQuaternion(qObs).normalize();
+    window.calibCapture = function () {
+      if (highlightedFaceIndex < 0) { console.warn('rest flat & still on a face first'); return; }
+      calibSamples.push({ index: highlightedFaceIndex, qObs: lastRawQuat.clone() });
+      console.log(`captured printed face ${face_nums[highlightedFaceIndex]} `
+                + `(geom ${highlightedFaceIndex}); ${calibSamples.length} total.`);
+      window.calibSampleCount = calibSamples.length;
+      window.calibStatusMsg = `captured ${face_nums[highlightedFaceIndex]} (${calibSamples.length} total)`;
+    };
 
-      // snap to NEAREST vertical, so we null the small tilt and never a 180° flip
-      const target = new THREE.Vector3(0, nWorld.y >= 0 ? 1 : -1, 0);
-      const qTilt  = new THREE.Quaternion().setFromUnitVectors(nWorld, target);
+    window.calibSolve = function () {
+      if (calibSamples.length < 2) { console.warn('capture at least 2 faces first'); return; }
 
-      // world-frame tilt -> constant body-frame offset:  qObs⁻¹ · qTilt · qObs
-      const qOffset = qObs.clone().invert().multiply(qTilt).multiply(qObs);
+      // per sample: body normal n, and target world vector w = R(qObs)ᵀ·v
+      calibSamples.forEach(s => {
+        s.n = faceNormals[s.index].clone();
+        const nWorld = s.n.clone().applyQuaternion(s.qObs);
+        const v = new THREE.Vector3(0, nWorld.y >= 0 ? 1 : -1, 0); // nearest vertical
+        s.w = v.applyQuaternion(s.qObs.clone().invert());
+        window.calibStatusMsg = `solved from faces ${face_nums[A.index]} & ${face_nums[B.index]} — all faces should be level`;
+      });
 
+      // pick the most non-parallel pair for best conditioning (auto-skips opposite/duplicate)
+      let best = null, bestSep = 0;
+      for (let i = 0; i < calibSamples.length; i++)
+        for (let j = i + 1; j < calibSamples.length; j++) {
+          const sep = calibSamples[i].n.clone().cross(calibSamples[j].n).length();
+          if (sep > bestSep) { bestSep = sep; best = [calibSamples[i], calibSamples[j]]; }
+        }
+      if (bestSep < 0.2) {
+        console.warn('captured faces too close to parallel/opposite — pick two clearly '
+                  + 'different, non-opposite faces. sep=' + bestSep.toFixed(3));
+        return;
+      }
+
+      const [A, B] = best;
+      const qOffset = triadRotation(A.n, B.n, A.w, B.w);
       calibrationOffset.copy(qOffset);
       localStorage.setItem('imuCalibrationOffset', JSON.stringify(qOffset.toArray()));
-      console.log('calibrated against printed face', face_nums[i], '(geom index', i + ')');
+      console.log(`solved from printed faces ${face_nums[A.index]} & ${face_nums[B.index]} `
+                + `(sep ${bestSep.toFixed(2)}). applied & saved.`);
+    };
+
+    window.calibReset = function () {
+      calibSamples = [];
+      console.log('calibration samples cleared (saved offset untouched; '
+                + 'localStorage.removeItem("imuCalibrationOffset") to wipe that too).');
+      window.calibSampleCount = 0;
+      window.calibStatusMsg = 'samples cleared';
     };
 
     // Expose function to update gravity vector
@@ -354,4 +388,18 @@ function createTextSprite(text, color = 0x000000) {
   sprite.scale.set(0.5, 0.5, 1);
 
   return sprite;
+}
+
+// TRIAD: rotation R with R·a1 = b1 (exact) and R·a2 ≈ b2
+function triadRotation(a1, a2, b1, b2) {
+  const xa = a1.clone().normalize();
+  const za = a1.clone().cross(a2).normalize();
+  const ya = za.clone().cross(xa).normalize();
+  const xb = b1.clone().normalize();
+  const zb = b1.clone().cross(b2).normalize();
+  const yb = zb.clone().cross(xb).normalize();
+  const Ma = new THREE.Matrix4().makeBasis(xa, ya, za); // body triad as columns
+  const Mb = new THREE.Matrix4().makeBasis(xb, yb, zb); // target triad as columns
+  const R  = Mb.multiply(Ma.transpose());               // Mb · Maᵀ
+  return new THREE.Quaternion().setFromRotationMatrix(R);
 }

@@ -24,7 +24,12 @@
       <!-- labububot visualization  -->
       <canvas id="threeCanvas"></canvas>
       <p id="bottomFaceDisplay">Bottom face: <span id="bottomFaceNumber">—</span></p>
-      <button onclick="calibrateLevel()">calibrate</button>
+      <div id="calibPanel">
+        <div id="calibStatus">detecting…</div>
+        <button id="calibCaptureBtn" disabled>Capture first face</button>
+        <button id="calibSolveBtn" style="display:none">Solve &amp; apply</button>
+        <a id="calibResetBtn" href="#" style="display:none">reset</a>
+      </div>
     </div>
     <div>
       <h2>received data</h2>

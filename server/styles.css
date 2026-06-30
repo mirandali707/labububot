@@ -3,3 +3,7 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+
+#calibPanel  { display:flex; flex-direction:column; gap:6px; max-width:260px; font:14px system-ui; }
+#calibStatus { color:#555; }
+#calibResetBtn { color:#888; font-size:12px; }
