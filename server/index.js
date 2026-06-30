@@ -35,6 +35,7 @@ function toggleContinuousRoll() {
     if (!modeSpan) return;
     if (window.continuousRollOn){
         modeSpan.textContent = "roll";
+        sendRollCommand();
     } else {
         modeSpan.textContent = "none";
     }
@@ -47,6 +48,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
         if (!bottomSpan) return;
         bottomSpan.textContent = (face === null || typeof face === 'undefined') ? '—' : String(face);
     }
+    // In continuous roll mode, skip a sweep if one is still in flight so we
+    // always act on the current bottom face rather than queuing stale ones.
+    let sweepBusy = false;
     // Listen for event from threejs-viz
     window.addEventListener('bottomFaceChanged', (e) => {
         // IF FACE NUMBERS GET MESSED UP,
@@ -58,8 +62,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
         if (window.continuousRollOn){
             // continuous roll is on, sweep new bottom face
             const face = e.detail.face;
-            if (face !== null && typeof face !== 'undefined') {
-                sendSweepCommand(face);
+            if (face !== null && typeof face !== 'undefined' && !sweepBusy) {
+                sweepBusy = true;
+                sendSweepCommand(face).finally(() => { sweepBusy = false; });
             }
         }
     });

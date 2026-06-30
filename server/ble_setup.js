@@ -118,16 +118,29 @@ function isConnected() {
  * Send message to ESP32
  * @param {string} msg - message to send to ESP32
  */
+// GATT only allows one operation at a time, so chain writes through this
+// promise to serialize them. Without this, rapid sends (e.g. continuous roll
+// mode) throw "GATT operation already in progress".
+let sendQueue = Promise.resolve();
+
 async function sendToESP32(msg) {
   if (!charTx) {
     throw new Error('Not connected. Please connect first.');
   }
 
-  // Ensure the message is sent as an ArrayBuffer/TypedArray
-  const encoder = new TextEncoder();
-  const data = encoder.encode(String(msg));
-  await charTx.writeValue(data);
-  console.log(`Sent to ESP32: ${msg}`);
+  // Queue this write after any in-flight write completes.
+  const run = sendQueue.then(async () => {
+    // Ensure the message is sent as an ArrayBuffer/TypedArray
+    const encoder = new TextEncoder();
+    const data = encoder.encode(String(msg));
+    await charTx.writeValue(data);
+    console.log(`Sent to ESP32: ${msg}`);
+  });
+
+  // Keep the queue alive even if this write rejects, so one failure doesn't
+  // permanently block subsequent sends.
+  sendQueue = run.catch(() => {});
+  return run;
 }
 
 /**
