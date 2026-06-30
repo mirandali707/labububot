@@ -65,9 +65,10 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
     const geom = new FlatDodecahedronGeometry(radius);
     geom.computeVertexNormals(); 
 
-    // Colors: default and highlight
+    // Colors: default, bottom-face highlight, top-face highlight
     const defaultColor = new THREE.Color(0xfa87ce);
     const highlightColor = new THREE.Color(0x00ff00);
+    const topHighlightColor = new THREE.Color(0xffff00);
 
     // Use vertex colors so we can color faces individually
     const mat = new THREE.MeshStandardMaterial({ vertexColors: true, flatShading: true });
@@ -127,8 +128,9 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
     // Face numbering mapping (corresponds to faceCenters order)
     const face_nums = [10, 12, 7, 3, 1, 11, 4, 5, 2, 9, 8, 6];
 
-    // Expose bottom face number globally (initially unknown)
+    // Expose bottom/top face numbers globally (initially unknown)
     window.bottomFaceNumber = null;
+    window.topFaceNumber = null;
 
     // Prepare a color attribute (one color per vertex)
     const colors = new Float32Array(positions.length);
@@ -140,33 +142,43 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
     const colorAttr = new THREE.BufferAttribute(colors, 3);
     geom.setAttribute('color', colorAttr);
     let highlightedFaceIndex = -1;
+    let topHighlightedFaceIndex = -1;
 
-    function setFaceColors(highlightIndex) {
+    function paintFace(faceIndex, color) {
+      if (faceIndex < 0) return;
+      const tris = faceTriangles[faceIndex];
+      for (let t = 0; t < tris.length; t++) {
+        const tri = tris[t];
+        for (let vi = 0; vi < 3; vi++) {
+          const vIndex = tri[vi];
+          colors[vIndex * 3] = color.r;
+          colors[vIndex * 3 + 1] = color.g;
+          colors[vIndex * 3 + 2] = color.b;
+        }
+      }
+    }
+
+    function setFaceColors(bottomIndex, topIndex) {
       // reset to default
       for (let i = 0; i < colors.length; i += 3) {
         colors[i] = defaultColor.r;
         colors[i+1] = defaultColor.g;
         colors[i+2] = defaultColor.b;
       }
-      if (highlightIndex >= 0) {
-        const tris = faceTriangles[highlightIndex];
-        for (let t = 0; t < tris.length; t++) {
-          const tri = tris[t];
-          for (let vi = 0; vi < 3; vi++) {
-            const vIndex = tri[vi];
-            colors[vIndex * 3] = highlightColor.r;
-            colors[vIndex * 3 + 1] = highlightColor.g;
-            colors[vIndex * 3 + 2] = highlightColor.b;
-          }
-        }
-      }
+      paintFace(bottomIndex, highlightColor);
+      paintFace(topIndex, topHighlightColor);
       colorAttr.needsUpdate = true;
-      highlightedFaceIndex = highlightIndex;
-      // Update global bottom-face variable and notify listeners
-      window.bottomFaceNumber = (highlightIndex >= 0 && typeof face_nums !== 'undefined') ? face_nums[highlightIndex] : null;
+      highlightedFaceIndex = bottomIndex;
+      topHighlightedFaceIndex = topIndex;
+      // Update global bottom/top-face variables and notify listeners
+      window.bottomFaceNumber = (bottomIndex >= 0 && typeof face_nums !== 'undefined') ? face_nums[bottomIndex] : null;
+      window.topFaceNumber = (topIndex >= 0 && typeof face_nums !== 'undefined') ? face_nums[topIndex] : null;
       try {
         window.dispatchEvent(new CustomEvent('bottomFaceChanged', {
-          detail: { face: window.bottomFaceNumber, index: highlightIndex }
+          detail: { face: window.bottomFaceNumber, index: bottomIndex }
+        }));
+        window.dispatchEvent(new CustomEvent('topFaceChanged', {
+          detail: { face: window.topFaceNumber, index: topIndex }
         }));
       } catch (e) {
         // ignore if environment doesn't support CustomEvent
@@ -260,9 +272,12 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
       // Keep previous arrow behavior (rotate gravity by mesh quaternion for visualization)
       let direction = new THREE.Vector3(gx, gy, gz).normalize();
       direction.applyQuaternion(mesh.quaternion);
-      // Transform each face normal into world/global space and compare with gravity
+      // Transform each face normal into world/global space and compare with gravity.
+      // Bottom face = normal most aligned with gravity; top face = most opposed.
       let bestIndex = -1;
       let bestDot = -Infinity;
+      let topIndex = -1;
+      let worstDot = Infinity;
       for (let i = 0; i < (faceNormals ? faceNormals.length : 0); i++) {
         const globalNormal = faceNormals[i].clone().applyQuaternion(mesh.quaternion).normalize();
         const d = globalNormal.dot(direction);
@@ -270,9 +285,13 @@ import { FlatDodecahedronGeometry } from './FlatDodecahedronGeometry.js';
           bestDot = d;
           bestIndex = i;
         }
+        if (d < worstDot) {
+          worstDot = d;
+          topIndex = i;
+        }
       }
-      if (bestIndex !== highlightedFaceIndex) {
-        setFaceColors(bestIndex);
+      if (bestIndex !== highlightedFaceIndex || topIndex !== topHighlightedFaceIndex) {
+        setFaceColors(bestIndex, topIndex);
       }
 
       gravityArrow.setDirection(direction);

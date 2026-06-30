@@ -48,6 +48,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
         if (!bottomSpan) return;
         bottomSpan.textContent = (face === null || typeof face === 'undefined') ? '—' : String(face);
     }
+    // Top face display: update when threejs dispatches event
+    const topSpan = document.getElementById('topFaceNumber');
+    function updateTopFace(face) {
+        if (!topSpan) return;
+        topSpan.textContent = (face === null || typeof face === 'undefined') ? '—' : String(face);
+    }
     // In continuous roll mode, skip a sweep if one is still in flight so we
     // always act on the current bottom face rather than queuing stale ones.
     let sweepBusy = false;
@@ -68,8 +74,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
             }
         }
     });
+    // Listen for top face event from threejs-viz
+    window.addEventListener('topFaceChanged', (e) => {
+        updateTopFace(e.detail.face);
+    });
     // If value already present on window, initialize display
     if (typeof window.bottomFaceNumber !== 'undefined') updateBottomFace(window.bottomFaceNumber);
+    if (typeof window.topFaceNumber !== 'undefined') updateTopFace(window.topFaceNumber);
 
     // Send Message Button
     sendButton.addEventListener('click', async () => {
