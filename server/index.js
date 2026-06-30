@@ -58,6 +58,15 @@ function toggleContinuousRoll() {
     }
 }
 
+function resetMode() {
+    window.continuousRollOn = false;
+    window.gopherModeOn = false;
+    console.log("mode reset to default (none)");
+
+    const modeSpan = document.getElementById('currentMode');
+    if (modeSpan) modeSpan.textContent = "none";
+}
+
 function toggleGopherMode() {
     const gopherModeOn = window.gopherModeOn || false;
     // flip tha switch
